@@ -1,2 +1,3 @@
-# LocalSearchVisualizer
-Visualizer tool for various local search algorithms. Made with Vaadin.
+# Local Search Visualizer
+Visualizer tool for various local search algorithms.
+Made with Vaadin.Cancel Changes
