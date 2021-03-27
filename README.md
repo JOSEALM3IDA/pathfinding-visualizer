@@ -1,3 +1,3 @@
-# Local Search Visualizer
-Visualizer tool for various local search algorithms.
+# Pathfinding Visualizer
+Visualizer tool for various pathfinding algorithms.
 Made with Vaadin.
