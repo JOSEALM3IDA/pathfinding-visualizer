@@ -48,11 +48,8 @@ public class GridContainer {
                 "\"grid-container-id\").style.gridTemplateColumns = \"repeat("
                 + nCols + ", 1fr)\"");
 
-        for (int j = 0; j < nRows; j++) {
-            for (int i = 0; i < nCols; i++) {
-                addSquare();
-            }
-        }
+        for (int i = 0; i < nCols * nRows; i++)
+            addSquare();
     }
 
     public Div getContainer() {

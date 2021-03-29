@@ -86,7 +86,11 @@ public class Drawer extends AppLayout {
             if (value <= 0)
                 throw new NumberFormatException();
 
-            gridContainer.setCols(value);
+            if (name.equals("columns"))
+                gridContainer.setCols(value);
+            else if (name.equals("rows"))
+                gridContainer.setRows(value);
+
         } catch (NumberFormatException exc) {
             throwErrorNotification("Number of " + name + " must be a positive integer!");
         }
