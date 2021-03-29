@@ -1,3 +1,0 @@
-[part~="navbar"]{
-    background-color: red;
-}

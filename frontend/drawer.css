@@ -49,3 +49,15 @@ vaadin-tab[selected] {
 	border: 1px solid #1676f3;
 	border-radius: 50%;
 }
+
+.input-field {
+	/*margin: 0 0 5% 5%;*/
+	box-sizing: border-box;
+	width: 40%;
+	height: 5em;
+}
+
+.input-field-container {
+	margin: 0 0 5% 5%;
+	width: 80%;
+}
