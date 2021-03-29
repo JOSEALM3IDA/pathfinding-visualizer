@@ -3,14 +3,6 @@
   /* box-shadow: var(--lumo-box-shadow-s); */
   background-color: white;
 }
-#header vaadin-avatar {
-  margin-left: auto;
-  margin-right: var(--lumo-space-m);
-}
-vaadin-app-layout[dir='rtl'] #header vaadin-avatar {
-  margin-left: var(--lumo-space-m);
-  margin-right: auto;
-}
 #header h1 {
   font-size: var(--lumo-font-size-l);
   margin: 0;
@@ -59,5 +51,10 @@ vaadin-tab[selected] {
 
 .input-field-container {
 	margin: 0 0 5% 5%;
+	width: 80%;
+}
+
+.button-container {
+	margin: 0;
 	width: 80%;
 }

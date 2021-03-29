@@ -2,6 +2,7 @@ package jalmeida.pathfindingvisualizer.views.main;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.applayout.AppLayout;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.notification.Notification;
@@ -22,6 +23,7 @@ public class Drawer extends AppLayout {
 
     private TextField colsField;
     private TextField rowsField;
+    private Button resetButton;
     private final GridContainer gridContainer;
     private final Component drawerContent;
 
@@ -48,13 +50,14 @@ public class Drawer extends AppLayout {
         logoLayout.add(lsvLogo);
         logoLayout.add(new H1("Pathfinding Visualizer"));
 
-        HorizontalLayout hLayout = getInputBoxLayout();
+        HorizontalLayout hLayout = getGridSizeInputLayout();
+        VerticalLayout vLayout = getButtonLayout();
 
-        layout.add(logoLayout, hLayout);
+        layout.add(logoLayout, hLayout, vLayout);
         return layout;
     }
 
-    private HorizontalLayout getInputBoxLayout() {
+    private HorizontalLayout getGridSizeInputLayout() {
         colsField = new TextField("Columns");
         colsField.setClassName("input-field");
         colsField.setValue(Integer.toString(INIT_COLS));
@@ -77,6 +80,19 @@ public class Drawer extends AppLayout {
         hLayout.setClassName("input-field-container");
         hLayout.add(colsField, rowsField);
         return hLayout;
+    }
+
+    private VerticalLayout getButtonLayout() {
+        resetButton = new Button("Reset Grid");
+        resetButton.addClickListener(e -> {
+            gridContainer.clearGrid();
+        });
+
+        VerticalLayout vLayout = new VerticalLayout();
+        vLayout.setClassName("button-container");
+        vLayout.add(resetButton);
+
+        return vLayout;
     }
 
     private void onInputFieldChange(TextField field, String name) {

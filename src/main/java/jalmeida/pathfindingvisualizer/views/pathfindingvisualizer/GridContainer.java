@@ -1,18 +1,19 @@
 package jalmeida.pathfindingvisualizer.views.pathfindingvisualizer;
 
-import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Div;
 import org.atmosphere.inject.annotation.ApplicationScoped;
 
 import java.util.ArrayList;
 
+@CssImport("./grid.css")
 @ApplicationScoped
 public class GridContainer {
 
     private int nCols;
     private int nRows;
     final Div container;
-    ArrayList<Div> squares;
+    ArrayList<GridSquare> squares;
 
     public GridContainer() {
         this(0, 0);
@@ -48,18 +49,32 @@ public class GridContainer {
                 "\"grid-container-id\").style.gridTemplateColumns = \"repeat("
                 + nCols + ", 1fr)\"");
 
+        System.out.println("Cols: " + nCols + "; Rows: " + nRows);
         for (int i = 0; i < nCols * nRows; i++)
             addSquare();
+
+        if (nCols * nRows > 10)
+            getSquareAt(2, 2).setColor("green");
+    }
+
+    private void addSquare() {
+        GridSquare sqr = new GridSquare();
+        container.add(sqr.getContainer());
+        squares.add(sqr);
+    }
+
+    public void clearGrid() {
+        for (GridSquare sqr : squares)
+            sqr.reset();
+    }
+
+    public GridSquare getSquareAt(int line, int col) {
+        return squares.get(line * nCols + col);
     }
 
     public Div getContainer() {
         return container;
     }
 
-    private void addSquare() {
-        Div sqr = new Div();
-        sqr.setClassName("grid-square");
-        squares.add(sqr);
-        container.add(sqr);
-    }
+
 }
