@@ -58,3 +58,8 @@ vaadin-tab[selected] {
 	margin: 0;
 	width: 80%;
 }
+
+.checkbox-container {
+	margin: 0 5%;
+	width: 80%;
+}

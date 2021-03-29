@@ -3,6 +3,7 @@ package jalmeida.pathfindingvisualizer.views.main;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.notification.Notification;
@@ -15,6 +16,8 @@ import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.dependency.CssImport;
 import jalmeida.pathfindingvisualizer.views.pathfindingvisualizer.GridContainer;
 
+import java.awt.*;
+
 @JsModule("./shared-styles.js")
 @CssImport("./drawer.css")
 public class Drawer extends AppLayout {
@@ -24,6 +27,8 @@ public class Drawer extends AppLayout {
     private TextField colsField;
     private TextField rowsField;
     private Button resetButton;
+    private Checkbox obstacleCheckbox;
+
     private final GridContainer gridContainer;
     private final Component drawerContent;
 
@@ -50,10 +55,11 @@ public class Drawer extends AppLayout {
         logoLayout.add(lsvLogo);
         logoLayout.add(new H1("Pathfinding Visualizer"));
 
-        HorizontalLayout hLayout = getGridSizeInputLayout();
-        VerticalLayout vLayout = getButtonLayout();
+        HorizontalLayout inputLayout = getGridSizeInputLayout();
+        VerticalLayout buttonLayout = getButtonLayout();
+        HorizontalLayout checkboxLayout = getCheckboxLayout();
 
-        layout.add(logoLayout, hLayout, vLayout);
+        layout.add(logoLayout, inputLayout, checkboxLayout, buttonLayout);
         return layout;
     }
 
@@ -93,6 +99,21 @@ public class Drawer extends AppLayout {
         vLayout.add(resetButton);
 
         return vLayout;
+    }
+
+    private HorizontalLayout getCheckboxLayout() {
+        obstacleCheckbox = new Checkbox("Obstacle Placement");
+        obstacleCheckbox.setValue(true);
+
+        obstacleCheckbox.addValueChangeListener(e -> {
+            gridContainer.setObstaclePlacement(obstacleCheckbox.getValue());
+        });
+
+        HorizontalLayout hLayout = new HorizontalLayout();
+        hLayout.setClassName("checkbox-container");
+        hLayout.add(obstacleCheckbox);
+
+        return hLayout;
     }
 
     private void onInputFieldChange(TextField field, String name) {

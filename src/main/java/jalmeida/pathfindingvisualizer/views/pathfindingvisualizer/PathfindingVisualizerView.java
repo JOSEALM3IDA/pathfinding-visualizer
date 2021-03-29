@@ -9,6 +9,8 @@ import jalmeida.pathfindingvisualizer.views.main.MainView;
 import com.vaadin.flow.router.RouteAlias;
 import com.vaadin.flow.component.dependency.CssImport;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 
 @Route(value = "Pathfinding Visualizer", layout = MainView.class)
 @RouteAlias(value = "", layout = MainView.class)
@@ -23,6 +25,6 @@ public class PathfindingVisualizerView extends HorizontalLayout {
 
         this.gridContainer = ComponentUtil.getData(UI.getCurrent(), GridContainer.class);
         add(gridContainer.getContainer());
-    }
 
+    }
 }

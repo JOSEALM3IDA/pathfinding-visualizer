@@ -5,6 +5,7 @@ import com.vaadin.flow.component.html.Div;
 import org.atmosphere.inject.annotation.ApplicationScoped;
 
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @CssImport("./grid.css")
 @ApplicationScoped
@@ -12,8 +13,10 @@ public class GridContainer {
 
     private int nCols;
     private int nRows;
-    final Div container;
-    ArrayList<GridSquare> squares;
+    private final Div container;
+    private ArrayList<GridSquare> squares;
+    private AtomicBoolean isMousePressed;
+    private AtomicBoolean isActiveObstaclePlacement;
 
     public GridContainer() {
         this(0, 0);
@@ -31,6 +34,11 @@ public class GridContainer {
 
         setCols(nCols);
         setRows(nRows);
+
+        isActiveObstaclePlacement = new AtomicBoolean(true);
+        isMousePressed = new AtomicBoolean(false);
+        container.getElement().addEventListener("mousedown", e -> { isMousePressed.set(true); });
+        container.getElement().addEventListener("mouseup", e -> { isMousePressed.set(false); });
     }
 
     public void setCols(int cols) {
@@ -43,22 +51,18 @@ public class GridContainer {
         redrawGrid();
     }
 
-    private void redrawGrid() {
+    public void redrawGrid() {
         container.removeAll();
         container.getElement().executeJs("document.getElementById(" +
                 "\"grid-container-id\").style.gridTemplateColumns = \"repeat("
                 + nCols + ", 1fr)\"");
 
-        System.out.println("Cols: " + nCols + "; Rows: " + nRows);
         for (int i = 0; i < nCols * nRows; i++)
             addSquare();
-
-        if (nCols * nRows > 10)
-            getSquareAt(2, 2).setColor("green");
     }
 
     private void addSquare() {
-        GridSquare sqr = new GridSquare();
+        GridSquare sqr = new GridSquare(this);
         container.add(sqr.getContainer());
         squares.add(sqr);
     }
@@ -68,6 +72,8 @@ public class GridContainer {
             sqr.reset();
     }
 
+    public void setObstaclePlacement(Boolean value) { isActiveObstaclePlacement.set(value); }
+
     public GridSquare getSquareAt(int line, int col) {
         return squares.get(line * nCols + col);
     }
@@ -76,5 +82,8 @@ public class GridContainer {
         return container;
     }
 
+    public boolean isMousePressed() { return isMousePressed.get(); }
+
+    public boolean isActiveObstaclePlacement() { return isActiveObstaclePlacement.get(); }
 
 }
