@@ -50,7 +50,7 @@ vaadin-tab[selected] {
 }
 
 .input-field-container {
-	margin: 0 0 5% 5%;
+	margin: 0 5%;
 	width: 80%;
 }
 
@@ -59,7 +59,20 @@ vaadin-tab[selected] {
 	width: 80%;
 }
 
+.button-container-start-end {
+	margin: 0;
+	width: 80%;
+}
+
 .checkbox-container {
 	margin: 0 5%;
 	width: 80%;
+}
+
+.cursor-crosshair-start {
+	cursor: crosshair;
+}
+
+.cursor-crosshair-end {
+	cursor: crosshair;
 }

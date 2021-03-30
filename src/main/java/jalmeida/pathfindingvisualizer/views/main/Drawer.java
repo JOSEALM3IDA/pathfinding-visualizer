@@ -16,8 +16,6 @@ import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.dependency.CssImport;
 import jalmeida.pathfindingvisualizer.views.pathfindingvisualizer.GridContainer;
 
-import java.awt.*;
-
 @JsModule("./shared-styles.js")
 @CssImport("./drawer.css")
 public class Drawer extends AppLayout {
@@ -27,6 +25,8 @@ public class Drawer extends AppLayout {
     private TextField colsField;
     private TextField rowsField;
     private Button resetButton;
+    private Button setStartPointButton;
+    private Button setEndPointButton;
     private Checkbox obstacleCheckbox;
 
     private final GridContainer gridContainer;
@@ -89,24 +89,48 @@ public class Drawer extends AppLayout {
     }
 
     private VerticalLayout getButtonLayout() {
-        resetButton = new Button("Reset Grid");
-        resetButton.addClickListener(e -> {
-            gridContainer.clearGrid();
+        setStartPointButton = new Button("Set Start Point");
+        setStartPointButton.addClickListener(e -> {
+            if (!gridContainer.isActiveStartPointPlacement()) {
+                System.out.println("Chamada4: startPoint-true, obstacle-false, endPoint-false");
+                setStartPointPlacement(true);
+
+                setEndPointPlacement(false);
+            } else {
+                System.out.println("Chamada5: startPoint-true");
+                setStartPointPlacement(false);
+            }
         });
+
+        setEndPointButton = new Button("Set End Point");
+        setEndPointButton.addClickListener(e -> {
+            if (!gridContainer.isActiveEndPointPlacement()) {
+                System.out.println("Chamada2: endPoint-true, obstacle-false, startPoint-false");
+                setEndPointPlacement(true);
+
+                setStartPointPlacement(false);
+            } else {
+                System.out.println("Chamada3: endPoint-false");
+                setEndPointPlacement(false);
+            }
+        });
+
+        resetButton = new Button("Reset Grid");
+        resetButton.addClickListener(e -> gridContainer.clearGrid());
 
         VerticalLayout vLayout = new VerticalLayout();
         vLayout.setClassName("button-container");
-        vLayout.add(resetButton);
+        vLayout.add(setStartPointButton, setEndPointButton, resetButton);
 
         return vLayout;
     }
 
     private HorizontalLayout getCheckboxLayout() {
         obstacleCheckbox = new Checkbox("Obstacle Placement");
-        obstacleCheckbox.setValue(true);
+        setObstaclePlacement(true);
 
         obstacleCheckbox.addValueChangeListener(e -> {
-            gridContainer.setObstaclePlacement(obstacleCheckbox.getValue());
+            setObstaclePlacement(obstacleCheckbox.getValue());
         });
 
         HorizontalLayout hLayout = new HorizontalLayout();
@@ -131,6 +155,31 @@ public class Drawer extends AppLayout {
         } catch (NumberFormatException exc) {
             throwErrorNotification("Number of " + name + " must be a positive integer!");
         }
+    }
+
+    private void setObstaclePlacement(boolean value) {
+        obstacleCheckbox.setValue(value);
+        gridContainer.setActiveObstaclePlacement(value);
+    }
+
+    private void setStartPointPlacement(boolean value) {
+        System.out.println("Entrei setStartPoint com valor: " + value);
+        if (value)
+            gridContainer.getContainer().addClassName("cursor-crosshair-start");
+        else
+            gridContainer.getContainer().removeClassName("cursor-crosshair-start");
+
+        gridContainer.setActiveStartPointPlacement(value);
+    }
+
+    private void setEndPointPlacement(boolean value) {
+        System.out.println("Entrei setEndPoint com valor: " + value);
+        if (value)
+            gridContainer.getContainer().addClassName("cursor-crosshair-end");
+        else
+            gridContainer.getContainer().removeClassName("cursor-crosshair-end");
+
+        gridContainer.setActiveEndPointPlacement(value);
     }
 
     private void throwErrorNotification(String msg) {

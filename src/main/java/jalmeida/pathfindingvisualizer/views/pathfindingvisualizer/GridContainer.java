@@ -15,8 +15,14 @@ public class GridContainer {
     private int nRows;
     private final Div container;
     private ArrayList<GridSquare> squares;
-    private AtomicBoolean isMousePressed;
-    private AtomicBoolean isActiveObstaclePlacement;
+
+    private GridSquare startPoint;
+    private GridSquare endPoint;
+
+    private final AtomicBoolean isMousePressed;
+    private final AtomicBoolean isActiveObstaclePlacement;
+    private final AtomicBoolean isActiveStartPointPlacement;
+    private final AtomicBoolean isActiveEndPointPlacement;
 
     public GridContainer() {
         this(0, 0);
@@ -35,10 +41,13 @@ public class GridContainer {
         setCols(nCols);
         setRows(nRows);
 
+        isActiveStartPointPlacement = new AtomicBoolean(false);
+        isActiveEndPointPlacement = new AtomicBoolean(false);
+
         isActiveObstaclePlacement = new AtomicBoolean(true);
         isMousePressed = new AtomicBoolean(false);
-        container.getElement().addEventListener("mousedown", e -> { isMousePressed.set(true); });
-        container.getElement().addEventListener("mouseup", e -> { isMousePressed.set(false); });
+        container.getElement().addEventListener("mousedown", e -> isMousePressed.set(true));
+        container.getElement().addEventListener("mouseup", e -> isMousePressed.set(false));
     }
 
     public void setCols(int cols) {
@@ -68,11 +77,32 @@ public class GridContainer {
     }
 
     public void clearGrid() {
+        startPoint = null;
+        endPoint = null;
+
         for (GridSquare sqr : squares)
             sqr.reset();
     }
 
-    public void setObstaclePlacement(Boolean value) { isActiveObstaclePlacement.set(value); }
+    public void setStartPoint(GridSquare gridSquare) {
+        try {
+            startPoint.setAsDefault();
+        } catch (NullPointerException ignored) {}
+
+        startPoint = gridSquare;
+    }
+
+    public void setEndPoint(GridSquare gridSquare) {
+        try {
+            endPoint.setAsDefault();
+        } catch (NullPointerException ignored) {}
+
+        endPoint = gridSquare;
+    }
+
+    public void setActiveObstaclePlacement(boolean value) { isActiveObstaclePlacement.set(value); }
+    public void setActiveStartPointPlacement(boolean value) { isActiveStartPointPlacement.set(value); }
+    public void setActiveEndPointPlacement(boolean value) { isActiveEndPointPlacement.set(value); }
 
     public GridSquare getSquareAt(int line, int col) {
         return squares.get(line * nCols + col);
@@ -85,5 +115,6 @@ public class GridContainer {
     public boolean isMousePressed() { return isMousePressed.get(); }
 
     public boolean isActiveObstaclePlacement() { return isActiveObstaclePlacement.get(); }
-
+    public boolean isActiveStartPointPlacement() { return isActiveStartPointPlacement.get(); }
+    public boolean isActiveEndPointPlacement() { return isActiveEndPointPlacement.get(); }
 }
