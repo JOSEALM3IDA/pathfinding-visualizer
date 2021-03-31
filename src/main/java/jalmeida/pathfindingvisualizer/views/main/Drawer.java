@@ -109,8 +109,8 @@ public class Drawer extends AppLayout {
             }
         });
 
-        resetButton = new Button("Reset Grid");
-        resetButton.addClickListener(e -> gridContainer.clearGrid());
+        resetButton = new Button("Reset Obstacles");
+        resetButton.addClickListener(e -> gridContainer.clearObstacles());
 
         VerticalLayout vLayout = new VerticalLayout();
         vLayout.setClassName("button-container");

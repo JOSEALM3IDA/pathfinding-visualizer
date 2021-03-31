@@ -9,13 +9,13 @@ import java.util.ArrayList;
 @CssImport("./grid.css")
 public class GridSquare {
 
-    static final String DEFAULT_COLOR = "#f3f3f3";
-    static final String OBSTACLE_COLOR = "#6b6b6b";
-    static final String START_POINT_COLOR = "#ffd000";
-    static final String END_POINT_COLOR = "#a30000";
+    static final String DEFAULT_CLASS = "grid-s-default";
+    static final String OBSTACLE_CLASS = "grid-s-obstacle";
+    static final String START_POINT_CLASS = "grid-s-start-point";
+    static final String END_POINT_CLASS = "grid-s-end-point";
 
     Div container;
-    String color;
+    String currClass;
     ArrayList<DomListenerRegistration> listeners;
     GridContainer grid;
 
@@ -24,7 +24,7 @@ public class GridSquare {
 
         container = new Div();
         container.setClassName("grid-square");
-        setColor(DEFAULT_COLOR);
+        setClass(DEFAULT_CLASS);
 
         listeners = new ArrayList<>();
 
@@ -37,7 +37,7 @@ public class GridSquare {
     }
 
     public boolean handleMouseClick() {
-        if (color.equals(START_POINT_COLOR) || color.equals(END_POINT_COLOR)) return false;
+        if (currClass.equals(START_POINT_CLASS) || currClass.equals(END_POINT_CLASS)) return false;
 
         if (grid.isActiveStartPointPlacement()) {
             setAsStartPoint();
@@ -52,27 +52,35 @@ public class GridSquare {
         return true;
     }
 
-    public void setAsDefault() { setColor(DEFAULT_COLOR); }
+    public void setAsDefault() { setClass(DEFAULT_CLASS); }
 
-    public void setAsObstacle() { setColor(OBSTACLE_COLOR); }
+    public void setAsObstacle() { setClass(OBSTACLE_CLASS); }
 
     public void setAsStartPoint() {
-        setColor(START_POINT_COLOR);
+        setClass(START_POINT_CLASS);
         grid.getContainer().removeClassName("cursor-crosshair-start");
         grid.setActiveStartPointPlacement(false);
         grid.setStartPoint(this);
     }
 
     public void setAsEndPoint() {
-        setColor(END_POINT_COLOR);
+        setClass(END_POINT_CLASS);
         grid.getContainer().removeClassName("cursor-crosshair-end");
         grid.setActiveEndPointPlacement(false);
         grid.setEndPoint(this);
     }
 
-    public void setColor(String color) {
-        container.getElement().getStyle().set("backgroundColor", color);
-        this.color = color;
+    private void setClass(String cssClass) {
+        removeAllClasses();
+        container.addClassName(cssClass);
+        this.currClass = cssClass;
+    }
+
+    private void removeAllClasses() {
+        container.removeClassName(DEFAULT_CLASS);
+        container.removeClassName(START_POINT_CLASS);
+        container.removeClassName(END_POINT_CLASS);
+        container.removeClassName(OBSTACLE_CLASS);
     }
 
     public Div getContainer() {
@@ -80,6 +88,11 @@ public class GridSquare {
     }
 
     public void reset() {
-        setColor(DEFAULT_COLOR);
+        setClass(DEFAULT_CLASS);
+    }
+
+    public void resetObstacle() {
+        if (currClass.equals(OBSTACLE_CLASS))
+            setClass(DEFAULT_CLASS);
     }
 }

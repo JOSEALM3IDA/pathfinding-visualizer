@@ -1,11 +1,12 @@
+:root {
+	--transitionArgs: background-color 200ms linear;
+}
+
 .grid-container {
 	margin: 1% 3%;
 	width: 100%;
 	height: 80%;
 	display: grid;
-	/*border: 1px solid red;*/
-	/*grid-template-columns: repeat(2, 1fr);
-	grid-template-rows: repeat(auto-fill, 1fr);*/
 }
 
 .grid-container > div::before {
@@ -15,15 +16,32 @@
 }
 
 .grid-square {
-  /*margin: 0 1px;
-  border-radius: 0;
-  padding: 0;
-  min-width: 0;
-  min-height: 0;
-  line-height: 0px;
-  */
-  /*background-color: #f3f3f3; /*red;*/
-  width: 100%;
-  flex-grow: 1;
-  border: 1px solid white;
+	width: 100%;
+	flex-grow: 1;
+	border: 0px solid white;
+}
+
+div[class^="grid-s-"], div[class*=" grid-s-"] {
+	-webkit-transition: var(--transitionArgs);
+	-moz-transition: var(--transitionArgs);
+	-o-transition: var(--transitionArgs);
+    -ms-transition: var(--transitionArgs);
+	transition: var(--transitionArgs);
+}
+
+
+.grid-s-default {
+	background-color: #f3f3f3;
+}
+
+.grid-s-obstacle {
+	background-color: #6b6b6b;
+}
+
+.grid-s-start-point {
+	background-color: #ffd000;
+}
+
+.grid-s-end-point {
+	background-color: #a30000;
 }

@@ -71,15 +71,14 @@ public class GridContainer {
         for (int i = 0; i < nCols * nRows; i++)
             addSquare();
 
-
-        if (isActiveStartPointPlacement == null || isActiveEndPointPlacement == null || nCols * nRows < 4)
-            return;
-
         initializeStartEndPoints();
     }
 
     private void initializeStartEndPoints() {
         Random rn = new Random();
+
+        if (isActiveStartPointPlacement == null || isActiveEndPointPlacement == null || nCols * nRows < 4)
+            return;
 
         setActiveStartPointPlacement(true);
         while (!squares.get(rn.nextInt(nCols * nRows)).handleMouseClick());
@@ -104,6 +103,11 @@ public class GridContainer {
             sqr.reset();
 
         initializeStartEndPoints();
+    }
+
+    public void clearObstacles() {
+        for (GridSquare sqr : squares)
+            sqr.resetObstacle();
     }
 
     public void setStartPoint(GridSquare gridSquare) {
