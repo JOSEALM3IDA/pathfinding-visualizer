@@ -92,12 +92,9 @@ public class Drawer extends AppLayout {
         setStartPointButton = new Button("Set Start Point");
         setStartPointButton.addClickListener(e -> {
             if (!gridContainer.isActiveStartPointPlacement()) {
-                System.out.println("Chamada4: startPoint-true, obstacle-false, endPoint-false");
                 setStartPointPlacement(true);
-
                 setEndPointPlacement(false);
             } else {
-                System.out.println("Chamada5: startPoint-true");
                 setStartPointPlacement(false);
             }
         });
@@ -105,12 +102,9 @@ public class Drawer extends AppLayout {
         setEndPointButton = new Button("Set End Point");
         setEndPointButton.addClickListener(e -> {
             if (!gridContainer.isActiveEndPointPlacement()) {
-                System.out.println("Chamada2: endPoint-true, obstacle-false, startPoint-false");
                 setEndPointPlacement(true);
-
                 setStartPointPlacement(false);
             } else {
-                System.out.println("Chamada3: endPoint-false");
                 setEndPointPlacement(false);
             }
         });
@@ -147,13 +141,22 @@ public class Drawer extends AppLayout {
             if (value <= 0)
                 throw new NumberFormatException();
 
-            if (name.equals("columns"))
+            if (name.equals("columns")) {
+                if (gridContainer.getnRows() * value < 4)
+                    throw new IllegalArgumentException();
+
                 gridContainer.setCols(value);
-            else if (name.equals("rows"))
+            } else if (name.equals("rows")) {
+                if (gridContainer.getnCols() * value < 4)
+                    throw new IllegalArgumentException();
+
                 gridContainer.setRows(value);
+            }
 
         } catch (NumberFormatException exc) {
             throwErrorNotification("Number of " + name + " must be a positive integer!");
+        } catch (IllegalArgumentException exc) {
+            throwErrorNotification("There must be at least 4 squares on the grid!");
         }
     }
 
@@ -163,7 +166,6 @@ public class Drawer extends AppLayout {
     }
 
     private void setStartPointPlacement(boolean value) {
-        System.out.println("Entrei setStartPoint com valor: " + value);
         if (value)
             gridContainer.getContainer().addClassName("cursor-crosshair-start");
         else
@@ -173,7 +175,6 @@ public class Drawer extends AppLayout {
     }
 
     private void setEndPointPlacement(boolean value) {
-        System.out.println("Entrei setEndPoint com valor: " + value);
         if (value)
             gridContainer.getContainer().addClassName("cursor-crosshair-end");
         else

@@ -36,8 +36,8 @@ public class GridSquare {
         listeners.add(container.getElement().addEventListener("mousedown", e -> handleMouseClick()));
     }
 
-    private void handleMouseClick() {
-        if (color.equals(START_POINT_COLOR) || color.equals(END_POINT_COLOR)) return;
+    public boolean handleMouseClick() {
+        if (color.equals(START_POINT_COLOR) || color.equals(END_POINT_COLOR)) return false;
 
         if (grid.isActiveStartPointPlacement()) {
             setAsStartPoint();
@@ -48,6 +48,8 @@ public class GridSquare {
         } else {
             setAsDefault();
         }
+
+        return true;
     }
 
     public void setAsDefault() { setColor(DEFAULT_COLOR); }

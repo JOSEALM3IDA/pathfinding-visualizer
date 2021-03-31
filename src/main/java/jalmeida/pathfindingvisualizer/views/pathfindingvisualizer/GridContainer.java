@@ -5,6 +5,7 @@ import com.vaadin.flow.component.html.Div;
 import org.atmosphere.inject.annotation.ApplicationScoped;
 
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 @CssImport("./grid.css")
@@ -66,8 +67,27 @@ public class GridContainer {
                 "\"grid-container-id\").style.gridTemplateColumns = \"repeat("
                 + nCols + ", 1fr)\"");
 
+        squares.clear();
         for (int i = 0; i < nCols * nRows; i++)
             addSquare();
+
+
+        if (isActiveStartPointPlacement == null || isActiveEndPointPlacement == null || nCols * nRows < 4)
+            return;
+
+        initializeStartEndPoints();
+    }
+
+    private void initializeStartEndPoints() {
+        Random rn = new Random();
+
+        setActiveStartPointPlacement(true);
+        while (!squares.get(rn.nextInt(nCols * nRows)).handleMouseClick());
+        setActiveStartPointPlacement(false);
+
+        setActiveEndPointPlacement(true);
+        while (!squares.get(rn.nextInt(nCols * nRows)).handleMouseClick());
+        setActiveEndPointPlacement(false);
     }
 
     private void addSquare() {
@@ -82,6 +102,8 @@ public class GridContainer {
 
         for (GridSquare sqr : squares)
             sqr.reset();
+
+        initializeStartEndPoints();
     }
 
     public void setStartPoint(GridSquare gridSquare) {
@@ -104,13 +126,11 @@ public class GridContainer {
     public void setActiveStartPointPlacement(boolean value) { isActiveStartPointPlacement.set(value); }
     public void setActiveEndPointPlacement(boolean value) { isActiveEndPointPlacement.set(value); }
 
-    public GridSquare getSquareAt(int line, int col) {
-        return squares.get(line * nCols + col);
-    }
+    public GridSquare getSquareAt(int line, int col) { return squares.get(line * nCols + col); }
 
-    public Div getContainer() {
-        return container;
-    }
+    public Div getContainer() { return container; }
+    public int getnCols() { return nCols; }
+    public int getnRows() { return nRows; }
 
     public boolean isMousePressed() { return isMousePressed.get(); }
 
