@@ -45,3 +45,11 @@ div[class^="grid-s-"], div[class*=" grid-s-"] {
 .grid-s-end-point {
 	background-color: #a30000;
 }
+
+.grid-s-to-search {
+	background-color: #8eb2ca;
+}
+
+.grid-s-searched {
+	background-color: #267cb5;
+}

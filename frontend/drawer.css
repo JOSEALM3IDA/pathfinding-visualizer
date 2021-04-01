@@ -76,3 +76,7 @@ vaadin-tab[selected] {
 .cursor-crosshair-end {
 	cursor: crosshair;
 }
+
+.button-container-start-clear {
+	width: 80%;
+}

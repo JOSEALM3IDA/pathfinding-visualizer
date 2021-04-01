@@ -13,6 +13,8 @@ public class GridSquare {
     static final String OBSTACLE_CLASS = "grid-s-obstacle";
     static final String START_POINT_CLASS = "grid-s-start-point";
     static final String END_POINT_CLASS = "grid-s-end-point";
+    static final String TO_SEARCH_CLASS = "grid-s-to-search";
+    static final String SEARCHED_CLASS = "grid-s-searched";
 
     Div container;
     String currClass;
@@ -52,9 +54,22 @@ public class GridSquare {
         return true;
     }
 
-    public void setAsDefault() { setClass(DEFAULT_CLASS); }
+    public boolean isStartPoint() {
+        return currClass.equals(START_POINT_CLASS);
+    }
 
+    public boolean isEndPoint() {
+        return currClass.equals(END_POINT_CLASS);
+    }
+
+    public boolean isObstacle() {
+        return currClass.equals(OBSTACLE_CLASS);
+    }
+
+    public void setAsDefault() { setClass(DEFAULT_CLASS); }
     public void setAsObstacle() { setClass(OBSTACLE_CLASS); }
+    public void setAsToSearch() { setClass(TO_SEARCH_CLASS); }
+    public void setAsSearched() { setClass(SEARCHED_CLASS); }
 
     public void setAsStartPoint() {
         setClass(START_POINT_CLASS);
@@ -81,6 +96,8 @@ public class GridSquare {
         container.removeClassName(START_POINT_CLASS);
         container.removeClassName(END_POINT_CLASS);
         container.removeClassName(OBSTACLE_CLASS);
+        container.removeClassName(SEARCHED_CLASS);
+        container.removeClassName(TO_SEARCH_CLASS);
     }
 
     public Div getContainer() {
@@ -93,6 +110,11 @@ public class GridSquare {
 
     public void resetObstacle() {
         if (currClass.equals(OBSTACLE_CLASS))
+            setClass(DEFAULT_CLASS);
+    }
+
+    public void resetSolution() {
+        if (currClass.equals(SEARCHED_CLASS) || currClass.equals(TO_SEARCH_CLASS))
             setClass(DEFAULT_CLASS);
     }
 }

@@ -1,9 +1,11 @@
 package jalmeida.pathfindingvisualizer.views.pathfindingvisualizer;
 
 import com.vaadin.flow.component.dependency.CssImport;
+import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Div;
 import org.atmosphere.inject.annotation.ApplicationScoped;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -15,7 +17,7 @@ public class GridContainer {
     private int nCols;
     private int nRows;
     private final Div container;
-    private ArrayList<GridSquare> squares;
+    private ArrayList<GridSquare> gridSquares;
 
     private GridSquare startPoint;
     private GridSquare endPoint;
@@ -34,7 +36,7 @@ public class GridContainer {
         container.setClassName("grid-container");
         container.setId("grid-container-id");
 
-        squares = new ArrayList<>();
+        gridSquares = new ArrayList<>();
 
         nCols = initialCols;
         nRows = initialRows;
@@ -67,7 +69,7 @@ public class GridContainer {
                 "\"grid-container-id\").style.gridTemplateColumns = \"repeat("
                 + nCols + ", 1fr)\"");
 
-        squares.clear();
+        gridSquares.clear();
         for (int i = 0; i < nCols * nRows; i++)
             addSquare();
 
@@ -81,33 +83,38 @@ public class GridContainer {
             return;
 
         setActiveStartPointPlacement(true);
-        while (!squares.get(rn.nextInt(nCols * nRows)).handleMouseClick());
+        while (!gridSquares.get(rn.nextInt(nCols * nRows)).handleMouseClick());
         setActiveStartPointPlacement(false);
 
         setActiveEndPointPlacement(true);
-        while (!squares.get(rn.nextInt(nCols * nRows)).handleMouseClick());
+        while (!gridSquares.get(rn.nextInt(nCols * nRows)).handleMouseClick());
         setActiveEndPointPlacement(false);
     }
 
     private void addSquare() {
         GridSquare sqr = new GridSquare(this);
         container.add(sqr.getContainer());
-        squares.add(sqr);
+        gridSquares.add(sqr);
     }
 
     public void clearGrid() {
         startPoint = null;
         endPoint = null;
 
-        for (GridSquare sqr : squares)
+        for (GridSquare sqr : gridSquares)
             sqr.reset();
 
         initializeStartEndPoints();
     }
 
     public void clearObstacles() {
-        for (GridSquare sqr : squares)
+        for (GridSquare sqr : gridSquares)
             sqr.resetObstacle();
+    }
+
+    public void clearSolution() {
+        for (GridSquare sqr : gridSquares)
+            sqr.resetSolution();
     }
 
     public void setStartPoint(GridSquare gridSquare) {
@@ -130,7 +137,65 @@ public class GridContainer {
     public void setActiveStartPointPlacement(boolean value) { isActiveStartPointPlacement.set(value); }
     public void setActiveEndPointPlacement(boolean value) { isActiveEndPointPlacement.set(value); }
 
-    public GridSquare getSquareAt(int line, int col) { return squares.get(line * nCols + col); }
+    public GridSquare getSquareAt(int row, int col) { return gridSquares.get(row * nCols + col); }
+    public int[] getPosOfSquare(GridSquare gridSquare) {
+        int[] pos = {-1, -1};
+
+        for (int row = 0; row < nRows; row++)
+            for (int col = 0; col < nCols; col++)
+                if (gridSquare.equals(getSquareAt(row, col))) {
+                    pos[0] = row;
+                    pos[1] = col;
+                }
+
+        return pos;
+    }
+
+    public ArrayList<GridSquare> getNeighbours(GridSquare gridSquare) {
+        ArrayList<GridSquare> neighbours = new ArrayList<>();
+
+        int[] pos = getPosOfSquare(gridSquare);
+
+        if (pos[0] == -1 || pos[1] == -1) {
+            System.out.println("GRID SQUARE NOT FOUND!");
+            return null;
+        }
+
+        GridSquare neighbour;
+        if (pos[0] != 0) {
+            neighbour = getSquareAt(pos[0] - 1, pos[1]);
+            if (!neighbour.isObstacle())
+                neighbours.add(neighbour);
+        }
+
+        if (pos[1] != nCols - 1) {
+            neighbour = getSquareAt(pos[0], pos[1] + 1);
+            if (!neighbour.isObstacle())
+                neighbours.add(neighbour);
+        }
+
+        if (pos[0] != nRows - 1) {
+            neighbour = getSquareAt(pos[0] + 1, pos[1]);
+            if (!neighbour.isObstacle())
+                neighbours.add(neighbour);
+        }
+
+        if (pos[1] != 0) {
+            neighbour = getSquareAt(pos[0], pos[1] - 1);
+            if (!neighbour.isObstacle())
+                neighbours.add(neighbour);
+        }
+
+        return neighbours;
+    }
+
+    public GridSquare getStartPoint() {
+        return startPoint;
+    }
+
+    public GridSquare getEndPoint() {
+        return endPoint;
+    }
 
     public Div getContainer() { return container; }
     public int getnCols() { return nCols; }

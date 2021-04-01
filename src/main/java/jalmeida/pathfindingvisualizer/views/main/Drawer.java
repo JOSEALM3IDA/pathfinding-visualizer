@@ -11,9 +11,12 @@ import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.dependency.CssImport;
+import jalmeida.pathfindingvisualizer.algorithms.Algorithm;
+import jalmeida.pathfindingvisualizer.algorithms.DepthFirst;
 import jalmeida.pathfindingvisualizer.views.pathfindingvisualizer.GridContainer;
 
 @JsModule("./shared-styles.js")
@@ -21,13 +24,18 @@ import jalmeida.pathfindingvisualizer.views.pathfindingvisualizer.GridContainer;
 public class Drawer extends AppLayout {
     private static final int INIT_COLS = 100;
     private static final int INIT_ROWS = 45;
+    private static final String DEPTH_FIRST = "Depth-First Search";
+    private static final String A_STAR = "A*";
 
     private TextField colsField;
     private TextField rowsField;
-    private Button resetButton;
+    private Button resetObstaclesButton;
     private Button setStartPointButton;
     private Button setEndPointButton;
+    private Button startButton;
+    private Button clearButton;
     private Checkbox obstacleCheckbox;
+    private Select<String> algorithmSelect;
 
     private final GridContainer gridContainer;
     private final Component drawerContent;
@@ -58,8 +66,9 @@ public class Drawer extends AppLayout {
         HorizontalLayout inputLayout = getGridSizeInputLayout();
         VerticalLayout buttonLayout = getButtonLayout();
         HorizontalLayout checkboxLayout = getCheckboxLayout();
+        VerticalLayout selectLayout = getSelectLayout();
 
-        layout.add(logoLayout, inputLayout, checkboxLayout, buttonLayout);
+        layout.add(logoLayout, inputLayout, checkboxLayout, selectLayout, buttonLayout);
         return layout;
     }
 
@@ -109,12 +118,33 @@ public class Drawer extends AppLayout {
             }
         });
 
-        resetButton = new Button("Reset Obstacles");
-        resetButton.addClickListener(e -> gridContainer.clearObstacles());
+        clearButton = new Button("Clear");
+        clearButton.addClickListener(e -> gridContainer.clearSolution());
+
+        startButton = new Button("Start");
+        startButton.addClickListener(e -> {
+            clearButton.click();
+            switch (algorithmSelect.getValue()) {
+                case DEPTH_FIRST:
+                    Algorithm bf = new DepthFirst(gridContainer, gridContainer.getStartPoint(), gridContainer.getEndPoint());
+                    bf.solve();
+                    break;
+                case A_STAR:
+                    break;
+            }
+        });
+
+        HorizontalLayout hLayout = new HorizontalLayout();
+        hLayout.setClassName("button-container-start-clear");
+        hLayout.add(startButton);
+        hLayout.add(clearButton);
+
+        resetObstaclesButton = new Button("Reset Obstacles");
+        resetObstaclesButton.addClickListener(e -> gridContainer.clearObstacles());
 
         VerticalLayout vLayout = new VerticalLayout();
         vLayout.setClassName("button-container");
-        vLayout.add(setStartPointButton, setEndPointButton, resetButton);
+        vLayout.add(setStartPointButton, setEndPointButton, hLayout, resetObstaclesButton);
 
         return vLayout;
     }
@@ -132,6 +162,21 @@ public class Drawer extends AppLayout {
         hLayout.add(obstacleCheckbox);
 
         return hLayout;
+    }
+
+    private VerticalLayout getSelectLayout() {
+        algorithmSelect = new Select<>();
+        algorithmSelect.setLabel("Algorithm");
+        algorithmSelect.setItems(DEPTH_FIRST, A_STAR);
+
+        algorithmSelect.setValue(DEPTH_FIRST);
+
+
+        VerticalLayout vLayout = new VerticalLayout();
+        vLayout.setClassName("select-container");
+        vLayout.add(algorithmSelect);
+
+        return vLayout;
     }
 
     private void onInputFieldChange(TextField field, String name) {
