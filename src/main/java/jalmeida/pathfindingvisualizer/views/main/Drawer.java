@@ -98,6 +98,20 @@ public class Drawer extends AppLayout {
     }
 
     private VerticalLayout getButtonLayout() {
+        clearButton = new Button("Clear");
+        clearButton.addClickListener(e -> gridContainer.clearSolution());
+
+        startButton = new Button("Start");
+        startButton.addClickListener(e -> {
+            clearButton.click();
+            gridContainer.solve();
+        });
+
+        HorizontalLayout hLayout = new HorizontalLayout();
+        hLayout.setClassName("button-container-start-clear");
+        hLayout.add(startButton);
+        hLayout.add(clearButton);
+
         setStartPointButton = new Button("Set Start Point");
         setStartPointButton.addClickListener(e -> {
             if (!gridContainer.isActiveStartPointPlacement()) {
@@ -117,27 +131,6 @@ public class Drawer extends AppLayout {
                 setEndPointPlacement(false);
             }
         });
-
-        clearButton = new Button("Clear");
-        clearButton.addClickListener(e -> gridContainer.clearSolution());
-
-        startButton = new Button("Start");
-        startButton.addClickListener(e -> {
-            clearButton.click();
-            switch (algorithmSelect.getValue()) {
-                case DEPTH_FIRST:
-                    Algorithm bf = new DepthFirst(gridContainer, gridContainer.getStartPoint(), gridContainer.getEndPoint());
-                    bf.solve();
-                    break;
-                case A_STAR:
-                    break;
-            }
-        });
-
-        HorizontalLayout hLayout = new HorizontalLayout();
-        hLayout.setClassName("button-container-start-clear");
-        hLayout.add(startButton);
-        hLayout.add(clearButton);
 
         resetObstaclesButton = new Button("Reset Obstacles");
         resetObstaclesButton.addClickListener(e -> gridContainer.clearObstacles());
@@ -168,6 +161,16 @@ public class Drawer extends AppLayout {
         algorithmSelect = new Select<>();
         algorithmSelect.setLabel("Algorithm");
         algorithmSelect.setItems(DEPTH_FIRST, A_STAR);
+        algorithmSelect.addValueChangeListener(e -> {
+            Algorithm algorithm;
+            switch (algorithmSelect.getValue()) {
+                default:
+                case DEPTH_FIRST:
+                    algorithm = new DepthFirst(gridContainer);
+                    break;
+            }
+            gridContainer.setCurrAlgorithm(algorithm);
+        });
 
         algorithmSelect.setValue(DEPTH_FIRST);
 

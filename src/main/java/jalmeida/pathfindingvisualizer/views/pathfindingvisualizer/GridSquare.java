@@ -76,6 +76,9 @@ public class GridSquare {
         grid.getContainer().removeClassName("cursor-crosshair-start");
         grid.setActiveStartPointPlacement(false);
         grid.setStartPoint(this);
+
+        if (grid.isSolved())
+            grid.solve();
     }
 
     public void setAsEndPoint() {
@@ -83,6 +86,9 @@ public class GridSquare {
         grid.getContainer().removeClassName("cursor-crosshair-end");
         grid.setActiveEndPointPlacement(false);
         grid.setEndPoint(this);
+
+        if (grid.isSolved())
+            grid.solve();
     }
 
     private void setClass(String cssClass) {

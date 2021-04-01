@@ -3,6 +3,7 @@ package jalmeida.pathfindingvisualizer.views.pathfindingvisualizer;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Div;
+import jalmeida.pathfindingvisualizer.algorithms.Algorithm;
 import org.atmosphere.inject.annotation.ApplicationScoped;
 
 import java.lang.reflect.Array;
@@ -22,6 +23,9 @@ public class GridContainer {
     private GridSquare startPoint;
     private GridSquare endPoint;
 
+    private Algorithm currAlgorithm;
+
+    private boolean isSolved;
     private final AtomicBoolean isMousePressed;
     private final AtomicBoolean isActiveObstaclePlacement;
     private final AtomicBoolean isActiveStartPointPlacement;
@@ -43,6 +47,8 @@ public class GridContainer {
 
         setCols(nCols);
         setRows(nRows);
+
+        isSolved = false;
 
         isActiveStartPointPlacement = new AtomicBoolean(false);
         isActiveEndPointPlacement = new AtomicBoolean(false);
@@ -98,13 +104,12 @@ public class GridContainer {
     }
 
     public void clearGrid() {
-        startPoint = null;
-        endPoint = null;
 
         for (GridSquare sqr : gridSquares)
             sqr.reset();
 
         initializeStartEndPoints();
+        isSolved = false;
     }
 
     public void clearObstacles() {
@@ -112,9 +117,21 @@ public class GridContainer {
             sqr.resetObstacle();
     }
 
+    public void solve() {
+        if (currAlgorithm != null) {
+            clearSolution();
+            currAlgorithm.solve();
+            isSolved = true;
+        }
+    }
+
     public void clearSolution() {
-        for (GridSquare sqr : gridSquares)
-            sqr.resetSolution();
+        if (isSolved) {
+            for (GridSquare sqr : gridSquares)
+                sqr.resetSolution();
+
+            isSolved = false;
+        }
     }
 
     public void setStartPoint(GridSquare gridSquare) {
@@ -131,6 +148,10 @@ public class GridContainer {
         } catch (NullPointerException ignored) {}
 
         endPoint = gridSquare;
+    }
+
+    public void setCurrAlgorithm(Algorithm algorithm) {
+        currAlgorithm = algorithm;
     }
 
     public void setActiveObstaclePlacement(boolean value) { isActiveObstaclePlacement.set(value); }
@@ -202,6 +223,8 @@ public class GridContainer {
     public int getnRows() { return nRows; }
 
     public boolean isMousePressed() { return isMousePressed.get(); }
+
+    public boolean isSolved() { return isSolved; }
 
     public boolean isActiveObstaclePlacement() { return isActiveObstaclePlacement.get(); }
     public boolean isActiveStartPointPlacement() { return isActiveStartPointPlacement.get(); }
