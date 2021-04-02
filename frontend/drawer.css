@@ -80,3 +80,22 @@ vaadin-tab[selected] {
 .button-container-start-clear {
 	width: 80%;
 }
+
+.title-label {
+	color: var(--lumo-primary-color);
+	font-size: large;
+	margin: 5px auto;
+}
+
+.subtitle-label {
+	margin: 5px 5px;
+}
+
+.operator-num-field-pair {
+	margin-top: 0;
+	width: 80%;
+}
+
+.operator-num-field {
+	width: 50%;
+}
