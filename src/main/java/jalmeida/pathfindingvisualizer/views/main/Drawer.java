@@ -23,6 +23,7 @@ import jalmeida.pathfindingvisualizer.algorithms.DepthFirst;
 import jalmeida.pathfindingvisualizer.views.pathfindingvisualizer.GridContainer;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 
 @JsModule("./shared-styles.js")
@@ -47,6 +48,7 @@ public class Drawer extends AppLayout {
     private Label extraLabel;
     private Label operatorOrderLabel;
     private ArrayList<IntegerField> operatorOrderFields;
+    private String operatorOrder;
 
     private final GridContainer gridContainer;
     private final Component drawerContent;
@@ -122,6 +124,8 @@ public class Drawer extends AppLayout {
                 return;
 
             clearButton.click();
+
+            updateOperatorOrder();
             gridContainer.solve();
         });
 
@@ -223,6 +227,8 @@ public class Drawer extends AppLayout {
         operatorOrderFields.get(2).setValue(4);
         operatorOrderFields.get(3).setValue(2);
 
+        operatorOrder = "UDLR";
+
         for (IntegerField f : operatorOrderFields) {
             f.setClassName("operator-num-field");
             f.setMax(4);
@@ -246,6 +252,26 @@ public class Drawer extends AppLayout {
         return vLayout;
     }
 
+    private void updateOperatorOrder() {
+        HashMap<Integer, Character> hm = new HashMap<>();
+
+        hm.put(0, 'U');
+        hm.put(1, 'D');
+        hm.put(2, 'L');
+        hm.put(3, 'R');
+
+        StringBuilder operatorOrder = new StringBuilder();
+        operatorOrder.append(gridContainer.getOperatorOrder());
+
+        if (operatorOrder.length() == 0)
+            operatorOrder.append("----");
+
+        for (int i = 0; i < operatorOrderFields.size(); i++)
+            operatorOrder.setCharAt(operatorOrderFields.get(i).getValue() - 1, hm.get(i));
+
+        gridContainer.setOperatorOrder(operatorOrder.toString());
+    }
+
     private boolean validateOptions() { return handleOperatorOrderValidity(); }
 
     private boolean handleOperatorOrderValidity() {
@@ -266,6 +292,8 @@ public class Drawer extends AppLayout {
 
         if (!isValid)
             throwErrorNotification("Operator order must be unique!");
+        else
+            updateOperatorOrder();
 
         return isValid;
     }

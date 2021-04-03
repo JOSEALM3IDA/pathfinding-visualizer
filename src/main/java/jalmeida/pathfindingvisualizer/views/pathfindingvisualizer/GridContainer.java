@@ -24,6 +24,7 @@ public class GridContainer {
     private GridSquare endPoint;
 
     private Algorithm currAlgorithm;
+    private String currOperatorOrder;
 
     private boolean isSolved;
     private final AtomicBoolean isMousePressed;
@@ -117,6 +118,8 @@ public class GridContainer {
             sqr.resetObstacle();
     }
 
+    public void setOperatorOrder(String operatorOrder) { currOperatorOrder = operatorOrder; }
+
     public void solve() {
         if (currAlgorithm != null) {
             clearSolution();
@@ -159,6 +162,7 @@ public class GridContainer {
     public void setActiveEndPointPlacement(boolean value) { isActiveEndPointPlacement.set(value); }
 
     public GridSquare getSquareAt(int row, int col) { return gridSquares.get(row * nCols + col); }
+
     public int[] getPosOfSquare(GridSquare gridSquare) {
         int[] pos = {-1, -1};
 
@@ -173,8 +177,6 @@ public class GridContainer {
     }
 
     public ArrayList<GridSquare> getNeighbours(GridSquare gridSquare) {
-        ArrayList<GridSquare> neighbours = new ArrayList<>();
-
         int[] pos = getPosOfSquare(gridSquare);
 
         if (pos[0] == -1 || pos[1] == -1) {
@@ -182,33 +184,48 @@ public class GridContainer {
             return null;
         }
 
+        ArrayList<GridSquare> neighbours = new ArrayList<>();
         GridSquare neighbour;
-        if (pos[0] != 0) {
-            neighbour = getSquareAt(pos[0] - 1, pos[1]);
-            if (!neighbour.isObstacle())
-                neighbours.add(neighbour);
-        }
+        for (int i = 0; i < currOperatorOrder.length(); i++) {
+            switch (currOperatorOrder.toCharArray()[i]) {
+                case 'U':
+                    if (pos[0] != 0) {
+                        neighbour = getSquareAt(pos[0] - 1, pos[1]);
+                        if (!neighbour.isObstacle())
+                            neighbours.add(neighbour);
+                    }
+                    break;
+                case 'D':
+                    if (pos[0] != nRows - 1) {
+                        neighbour = getSquareAt(pos[0] + 1, pos[1]);
+                        if (!neighbour.isObstacle())
+                            neighbours.add(neighbour);
+                    }
+                    break;
+                case 'L':
+                    if (pos[1] != 0) {
+                        neighbour = getSquareAt(pos[0], pos[1] - 1);
+                        if (!neighbour.isObstacle())
+                            neighbours.add(neighbour);
+                    }
+                    break;
+                case 'R':
+                    if (pos[1] != nCols - 1) {
+                        neighbour = getSquareAt(pos[0], pos[1] + 1);
+                        if (!neighbour.isObstacle())
+                            neighbours.add(neighbour);
+                    }
+                    break;
 
-        if (pos[1] != nCols - 1) {
-            neighbour = getSquareAt(pos[0], pos[1] + 1);
-            if (!neighbour.isObstacle())
-                neighbours.add(neighbour);
-        }
-
-        if (pos[0] != nRows - 1) {
-            neighbour = getSquareAt(pos[0] + 1, pos[1]);
-            if (!neighbour.isObstacle())
-                neighbours.add(neighbour);
-        }
-
-        if (pos[1] != 0) {
-            neighbour = getSquareAt(pos[0], pos[1] - 1);
-            if (!neighbour.isObstacle())
-                neighbours.add(neighbour);
+                default:
+                    System.out.println("UNEXPECTED ERROR GETTING NEIGHBOURS!");
+            }
         }
 
         return neighbours;
     }
+
+    public String getOperatorOrder() { return currOperatorOrder; }
 
     public GridSquare getStartPoint() {
         return startPoint;
