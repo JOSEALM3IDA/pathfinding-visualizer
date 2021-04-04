@@ -13,12 +13,15 @@ import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.page.Push;
 import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.dependency.CssImport;
+import com.vaadin.flow.router.Route;
 import jalmeida.pathfindingvisualizer.algorithms.Algorithm;
+import jalmeida.pathfindingvisualizer.algorithms.BreadthFirst;
 import jalmeida.pathfindingvisualizer.algorithms.DepthFirst;
 import jalmeida.pathfindingvisualizer.views.pathfindingvisualizer.GridContainer;
 
@@ -26,12 +29,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
+@Push
+@Route("push")
 @JsModule("./shared-styles.js")
 @CssImport("./drawer.css")
 public class Drawer extends AppLayout {
     private static final int INIT_COLS = 100;
     private static final int INIT_ROWS = 45;
     private static final String DEPTH_FIRST = "Depth-First Search";
+    private static final String BREADTH_FIRST = "Breadth-First Search";
     private static final String A_STAR = "A*";
 
     private Label optionsLabel;
@@ -182,10 +188,14 @@ public class Drawer extends AppLayout {
     private VerticalLayout getSelectLayout() {
         algorithmSelect = new Select<>();
         algorithmSelect.setLabel("Algorithm");
-        algorithmSelect.setItems(DEPTH_FIRST, A_STAR);
+        algorithmSelect.setItems(DEPTH_FIRST, BREADTH_FIRST, A_STAR);
         algorithmSelect.addValueChangeListener(e -> {
             Algorithm algorithm;
             switch (algorithmSelect.getValue()) {
+                case BREADTH_FIRST:
+                    algorithm = new BreadthFirst(gridContainer);
+                    break;
+
                 default:
                 case DEPTH_FIRST:
                     algorithm = new DepthFirst(gridContainer);

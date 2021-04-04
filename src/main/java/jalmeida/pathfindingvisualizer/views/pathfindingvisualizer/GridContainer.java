@@ -3,6 +3,8 @@ package jalmeida.pathfindingvisualizer.views.pathfindingvisualizer;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.page.Push;
+import com.vaadin.flow.router.Route;
 import jalmeida.pathfindingvisualizer.algorithms.Algorithm;
 import org.atmosphere.inject.annotation.ApplicationScoped;
 

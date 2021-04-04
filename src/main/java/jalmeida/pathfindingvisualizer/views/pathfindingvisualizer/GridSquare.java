@@ -9,17 +9,21 @@ import java.util.ArrayList;
 @CssImport("./grid.css")
 public class GridSquare {
 
-    static final String DEFAULT_CLASS = "grid-s-default";
-    static final String OBSTACLE_CLASS = "grid-s-obstacle";
-    static final String START_POINT_CLASS = "grid-s-start-point";
-    static final String END_POINT_CLASS = "grid-s-end-point";
-    static final String TO_SEARCH_CLASS = "grid-s-to-search";
-    static final String SEARCHED_CLASS = "grid-s-searched";
+    private static final String DEFAULT_CLASS = "grid-s-default";
+    private static final String OBSTACLE_CLASS = "grid-s-obstacle";
+    private static final String START_POINT_CLASS = "grid-s-start-point";
+    private static final String END_POINT_CLASS = "grid-s-end-point";
+    private static final String TO_SEARCH_CLASS = "grid-s-to-search";
+    private static final String SEARCHED_CLASS = "grid-s-searched";
 
-    Div container;
-    String currClass;
-    ArrayList<DomListenerRegistration> listeners;
-    GridContainer grid;
+    private Div container;
+    private String currClass;
+    private ArrayList<DomListenerRegistration> listeners;
+    private GridContainer grid;
+
+    private int cost;
+
+
 
     public GridSquare(GridContainer grid) {
         this.grid = grid;
@@ -31,6 +35,8 @@ public class GridSquare {
         listeners = new ArrayList<>();
 
         attachListeners();
+
+        cost = 1;
     }
 
     private void attachListeners() {
@@ -57,19 +63,19 @@ public class GridSquare {
     public boolean isStartPoint() {
         return currClass.equals(START_POINT_CLASS);
     }
-
     public boolean isEndPoint() {
         return currClass.equals(END_POINT_CLASS);
     }
-
     public boolean isObstacle() {
         return currClass.equals(OBSTACLE_CLASS);
     }
+    public boolean isToSearch() { return currClass.equals(TO_SEARCH_CLASS); }
+    public boolean isSearched() { return currClass.equals(SEARCHED_CLASS); }
 
     public void setAsDefault() { setClass(DEFAULT_CLASS); }
     public void setAsObstacle() { setClass(OBSTACLE_CLASS); }
-    public void setAsToSearch() { setClass(TO_SEARCH_CLASS); }
-    public void setAsSearched() { setClass(SEARCHED_CLASS); }
+    public void setAsToSearch() { if (!(isStartPoint() || isEndPoint())) setClass(TO_SEARCH_CLASS); }
+    public void setAsSearched() { if (!(isStartPoint() || isEndPoint())) setClass(SEARCHED_CLASS); }
 
     public void setAsStartPoint() {
         setClass(START_POINT_CLASS);
@@ -109,6 +115,8 @@ public class GridSquare {
     public Div getContainer() {
         return container;
     }
+
+    public int getCost() { return cost; }
 
     public void reset() {
         setClass(DEFAULT_CLASS);

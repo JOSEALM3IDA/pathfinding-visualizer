@@ -4,11 +4,11 @@ import jalmeida.pathfindingvisualizer.views.pathfindingvisualizer.GridContainer;
 import jalmeida.pathfindingvisualizer.views.pathfindingvisualizer.GridSquare;
 
 import java.util.ArrayList;
-import java.util.Stack;
+import java.util.LinkedList;
 
-public class DepthFirst extends Algorithm {
+public class BreadthFirst extends Algorithm {
 
-    public DepthFirst(GridContainer gridContainer) {
+    public BreadthFirst(GridContainer gridContainer) {
         super(gridContainer);
     }
 
@@ -17,25 +17,25 @@ public class DepthFirst extends Algorithm {
         startPoint = gridContainer.getStartPoint();
         endPoint = gridContainer.getEndPoint();
 
-        Stack<GridSquare> stack = new Stack<>();
-        stack.push(startPoint);
+        LinkedList<GridSquare> queue = new LinkedList<>();
+        queue.add(startPoint);
 
         ArrayList<GridSquare> neighbours;
         GridSquare currNode;
-        while (!stack.isEmpty()) {
-            currNode = stack.pop();
+        while (queue.size() > 0) {
+            currNode = queue.poll();
+            while(queue.remove(currNode));
             currNode.setAsSearched();
+
             if (currNode.isEndPoint())
                 break;
 
             neighbours = gridContainer.getNeighbours(currNode);
-            for (int i = neighbours.size() - 1; i >= 0; i--)
-                if (!neighbours.get(i).isSearched()) {
-                    neighbours.get(i).setAsToSearch();
-                    stack.push(neighbours.get(i));
+            for (GridSquare neighbour : neighbours)
+                if (!neighbour.isSearched()) {
+                    neighbour.setAsToSearch();
+                    queue.add(neighbour);
                 }
         }
     }
-
-
 }
