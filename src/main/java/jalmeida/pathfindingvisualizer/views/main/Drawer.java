@@ -44,8 +44,8 @@ public class Drawer extends AppLayout {
     private TextField colsField;
     private TextField rowsField;
     private Button resetObstaclesButton;
-    private Button setStartPointButton;
-    private Button setEndPointButton;
+    //private Button setStartPointButton;
+    //private Button setEndPointButton;
     private Button startButton;
     private Button clearButton;
     private Checkbox obstacleCheckbox;
@@ -113,6 +113,7 @@ public class Drawer extends AppLayout {
         });
 
         gridContainer.setRows(INIT_ROWS);
+        gridContainer.redrawGrid();
 
         HorizontalLayout hLayout = new HorizontalLayout();
         hLayout.setClassName("input-field-container");
@@ -140,6 +141,7 @@ public class Drawer extends AppLayout {
         hLayout.add(startButton);
         hLayout.add(clearButton);
 
+        /*
         setStartPointButton = new Button("Set Start Point");
         setStartPointButton.addClickListener(e -> {
             if (!gridContainer.isActiveStartPointPlacement()) {
@@ -158,14 +160,15 @@ public class Drawer extends AppLayout {
             } else {
                 setEndPointPlacement(false);
             }
-        });
+        });*/
 
         resetObstaclesButton = new Button("Reset Obstacles");
         resetObstaclesButton.addClickListener(e -> gridContainer.clearObstacles());
 
         VerticalLayout vLayout = new VerticalLayout();
         vLayout.setClassName("button-container");
-        vLayout.add(setStartPointButton, setEndPointButton, hLayout, resetObstaclesButton);
+        //vLayout.add(setStartPointButton, setEndPointButton, hLayout, resetObstaclesButton);
+        vLayout.add(hLayout, resetObstaclesButton);
 
         return vLayout;
     }
@@ -335,11 +338,13 @@ public class Drawer extends AppLayout {
                     throw new IllegalArgumentException();
 
                 gridContainer.setCols(value);
+                gridContainer.redrawGrid();
             } else if (name.equals("rows")) {
                 if (gridContainer.getnCols() * value < 4)
                     throw new IllegalArgumentException();
 
                 gridContainer.setRows(value);
+                gridContainer.redrawGrid();
             }
 
         } catch (NumberFormatException exc) {
@@ -354,6 +359,7 @@ public class Drawer extends AppLayout {
         gridContainer.setActiveObstaclePlacement(value);
     }
 
+    /*
     private void setStartPointPlacement(boolean value) {
         if (value)
             gridContainer.getContainer().addClassName("cursor-crosshair-start");
@@ -370,7 +376,7 @@ public class Drawer extends AppLayout {
             gridContainer.getContainer().removeClassName("cursor-crosshair-end");
 
         gridContainer.setActiveEndPointPlacement(value);
-    }
+    }*/
 
     private void throwErrorNotification(String msg) {
         Notification notification = new Notification(msg);

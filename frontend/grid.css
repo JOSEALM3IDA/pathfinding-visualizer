@@ -1,5 +1,5 @@
 :root {
-	--transitionArgs: background-color 200ms linear;
+	--transitionArgs: background-color 100ms linear;
 }
 
 .grid-container {
@@ -30,7 +30,7 @@ div[class^="grid-s-"], div[class*=" grid-s-"] {
 }
 
 
-.grid-s-default {
+.grid-default {
 	background-color: #f3f3f3;
 }
 
@@ -38,11 +38,19 @@ div[class^="grid-s-"], div[class*=" grid-s-"] {
 	background-color: #6b6b6b;
 }
 
-.grid-s-start-point {
+.grid-start-point {
 	background-color: #ffd000;
 }
 
-.grid-s-end-point {
+.grab {
+	cursor: grab;
+}
+
+.grabbing {
+	cursor: grabbing;
+}
+
+.grid-end-point {
 	background-color: #a30000;
 }
 
