@@ -1,7 +1,7 @@
 package jalmeida.pathfindingvisualizer.algorithms;
 
-import jalmeida.pathfindingvisualizer.views.pathfindingvisualizer.GridContainer;
-import jalmeida.pathfindingvisualizer.views.pathfindingvisualizer.GridSquare;
+import jalmeida.pathfindingvisualizer.views.pathfindingvisualizer.grid.GridContainer;
+import jalmeida.pathfindingvisualizer.views.pathfindingvisualizer.grid.GridSquare;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -25,7 +25,7 @@ public class BreadthFirst extends Algorithm {
         while (queue.size() > 0) {
             currNode = queue.poll();
             while(queue.remove(currNode));
-            currNode.setAsSearched();
+            ui.access(currNode::setAsSearched);
 
             if (currNode.isEndPoint())
                 break;
@@ -33,7 +33,7 @@ public class BreadthFirst extends Algorithm {
             neighbours = gridContainer.getNeighbours(currNode);
             for (GridSquare neighbour : neighbours)
                 if (!neighbour.isSearched()) {
-                    neighbour.setAsToSearch();
+                    ui.access(neighbour::setAsToSearch);
                     queue.add(neighbour);
                 }
         }

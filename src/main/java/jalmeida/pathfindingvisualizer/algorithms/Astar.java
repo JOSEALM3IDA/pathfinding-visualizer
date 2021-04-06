@@ -1,7 +1,7 @@
 package jalmeida.pathfindingvisualizer.algorithms;
 
-import jalmeida.pathfindingvisualizer.views.pathfindingvisualizer.GridContainer;
-import jalmeida.pathfindingvisualizer.views.pathfindingvisualizer.GridSquare;
+import jalmeida.pathfindingvisualizer.views.pathfindingvisualizer.grid.GridContainer;
+import jalmeida.pathfindingvisualizer.views.pathfindingvisualizer.grid.GridSquare;
 
 import java.util.ArrayList;
 

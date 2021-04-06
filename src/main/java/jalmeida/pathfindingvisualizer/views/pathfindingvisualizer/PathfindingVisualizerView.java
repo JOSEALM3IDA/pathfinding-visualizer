@@ -8,8 +8,7 @@ import com.vaadin.flow.router.PageTitle;
 import jalmeida.pathfindingvisualizer.views.main.MainView;
 import com.vaadin.flow.router.RouteAlias;
 import com.vaadin.flow.component.dependency.CssImport;
-
-import java.util.concurrent.atomic.AtomicBoolean;
+import jalmeida.pathfindingvisualizer.views.pathfindingvisualizer.grid.GridContainer;
 
 
 @Route(value = "Pathfinding Visualizer", layout = MainView.class)

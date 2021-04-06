@@ -1,12 +1,8 @@
 package jalmeida.pathfindingvisualizer.algorithms;
 
-import jalmeida.pathfindingvisualizer.views.pathfindingvisualizer.GridContainer;
-import jalmeida.pathfindingvisualizer.views.pathfindingvisualizer.GridSquare;
-
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
+import com.vaadin.flow.component.UI;
+import jalmeida.pathfindingvisualizer.views.pathfindingvisualizer.grid.GridContainer;
+import jalmeida.pathfindingvisualizer.views.pathfindingvisualizer.grid.GridSquare;
 
 public abstract class Algorithm {
 
@@ -15,6 +11,8 @@ public abstract class Algorithm {
     protected GridContainer gridContainer;
     protected GridSquare startPoint;
     protected GridSquare endPoint;
+
+    protected UI ui;
 
     public Algorithm(GridContainer gridContainer) { this.gridContainer = gridContainer; }
 
@@ -42,4 +40,6 @@ public abstract class Algorithm {
             Thread.currentThread().interrupt();
         }
     }
+
+    public void setUI(UI ui) { this.ui = ui; }
 }

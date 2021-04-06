@@ -1,4 +1,4 @@
-package jalmeida.pathfindingvisualizer.views.pathfindingvisualizer;
+package jalmeida.pathfindingvisualizer.views.pathfindingvisualizer.grid;
 
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Div;
@@ -24,8 +24,6 @@ public class GridSquare {
     private GridContainer grid;
 
     private int cost;
-
-
 
     public GridSquare(GridContainer grid) {
         this.grid = grid;
@@ -100,9 +98,6 @@ public class GridSquare {
 
         grid.setStartPoint(this);
 
-        if (grid.isSolved())
-            grid.solve();
-
         return true;
     }
 
@@ -117,9 +112,6 @@ public class GridSquare {
             setGrab(true);
 
         grid.setEndPoint(this);
-
-        if (grid.isSolved())
-            grid.solve();
 
         return true;
     }

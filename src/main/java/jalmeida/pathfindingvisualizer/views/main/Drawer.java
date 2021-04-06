@@ -16,14 +16,13 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.page.Push;
 import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.component.textfield.IntegerField;
-import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.router.Route;
 import jalmeida.pathfindingvisualizer.algorithms.Algorithm;
 import jalmeida.pathfindingvisualizer.algorithms.BreadthFirst;
 import jalmeida.pathfindingvisualizer.algorithms.DepthFirst;
-import jalmeida.pathfindingvisualizer.views.pathfindingvisualizer.GridContainer;
+import jalmeida.pathfindingvisualizer.views.pathfindingvisualizer.grid.GridContainer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,8 +40,8 @@ public class Drawer extends AppLayout {
     private static final String A_STAR = "A*";
 
     private Label optionsLabel;
-    private TextField colsField;
-    private TextField rowsField;
+    private IntegerField colsField;
+    private IntegerField rowsField;
     private Button resetObstaclesButton;
     //private Button setStartPointButton;
     //private Button setEndPointButton;
@@ -96,20 +95,28 @@ public class Drawer extends AppLayout {
     }
 
     private HorizontalLayout getGridSizeInputLayout() {
-        colsField = new TextField("Columns");
-        colsField.setClassName("input-field");
-        colsField.setValue(Integer.toString(INIT_COLS));
+        colsField = new IntegerField("Columns");
+        colsField.setClassName("columns-field");
+        colsField.setMin(2);
+        colsField.setValue(INIT_COLS);
+        colsField.setMax(INIT_COLS * 2);
+        colsField.setHasControls(true);
         colsField.addValueChangeListener(e -> {
-            onInputFieldChange(colsField, "columns");
+            gridContainer.setCols(colsField.getValue());
+            gridContainer.redrawGrid();
         });
 
         gridContainer.setCols(INIT_COLS);
 
-        rowsField = new TextField("Rows");
-        rowsField.setClassName("input-field");
-        rowsField.setValue(Integer.toString(INIT_ROWS));
+        rowsField = new IntegerField("Rows");
+        rowsField.setClassName("rows-field");
+        rowsField.setMin(2);
+        rowsField.setValue(INIT_ROWS);
+        rowsField.setMax(INIT_ROWS * 2);
+        rowsField.setHasControls(true);
         rowsField.addValueChangeListener(e -> {
-            onInputFieldChange(rowsField, "rows");
+            gridContainer.setRows(rowsField.getValue());
+            gridContainer.redrawGrid();
         });
 
         gridContainer.setRows(INIT_ROWS);
@@ -324,34 +331,6 @@ public class Drawer extends AppLayout {
         }
 
         return !isInvalid;
-    }
-
-    private void onInputFieldChange(TextField field, String name) {
-        try {
-            int value = Integer.parseInt(field.getValue());
-
-            if (value <= 0)
-                throw new NumberFormatException();
-
-            if (name.equals("columns")) {
-                if (gridContainer.getnRows() * value < 4)
-                    throw new IllegalArgumentException();
-
-                gridContainer.setCols(value);
-                gridContainer.redrawGrid();
-            } else if (name.equals("rows")) {
-                if (gridContainer.getnCols() * value < 4)
-                    throw new IllegalArgumentException();
-
-                gridContainer.setRows(value);
-                gridContainer.redrawGrid();
-            }
-
-        } catch (NumberFormatException exc) {
-            throwErrorNotification("Number of " + name + " must be a positive integer!");
-        } catch (IllegalArgumentException exc) {
-            throwErrorNotification("There must be at least 4 squares on the grid!");
-        }
     }
 
     private void setObstaclePlacement(boolean value) {

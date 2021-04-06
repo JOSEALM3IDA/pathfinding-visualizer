@@ -1,14 +1,11 @@
-package jalmeida.pathfindingvisualizer.views.pathfindingvisualizer;
+package jalmeida.pathfindingvisualizer.views.pathfindingvisualizer.grid;
 
 import com.vaadin.flow.component.dependency.CssImport;
-import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.page.Push;
-import com.vaadin.flow.router.Route;
 import jalmeida.pathfindingvisualizer.algorithms.Algorithm;
+import jalmeida.pathfindingvisualizer.algorithms.SolverThread;
 import org.atmosphere.inject.annotation.ApplicationScoped;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -126,7 +123,8 @@ public class GridContainer {
     public void solve() {
         if (currAlgorithm != null) {
             clearSolution();
-            currAlgorithm.solve();
+            SolverThread st = new SolverThread(currAlgorithm, container.getUI().get());
+            st.start();
             isSolved = true;
         }
     }
@@ -146,6 +144,10 @@ public class GridContainer {
         } catch (NullPointerException ignored) {}
 
         startPoint = gridSquare;
+
+        if (isSolved())
+            solve();
+
     }
 
     public void setEndPoint(GridSquare gridSquare) {
@@ -154,6 +156,9 @@ public class GridContainer {
         } catch (NullPointerException ignored) {}
 
         endPoint = gridSquare;
+
+        if (isSolved())
+            solve();
     }
 
     public void setCurrAlgorithm(Algorithm algorithm) {

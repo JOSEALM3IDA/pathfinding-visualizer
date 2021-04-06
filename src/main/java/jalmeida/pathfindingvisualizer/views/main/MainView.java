@@ -10,7 +10,7 @@ import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.server.PWA;
-import jalmeida.pathfindingvisualizer.views.pathfindingvisualizer.GridContainer;
+import jalmeida.pathfindingvisualizer.views.pathfindingvisualizer.grid.GridContainer;
 
 
 /**

@@ -42,11 +42,18 @@ vaadin-tab[selected] {
 	border-radius: 50%;
 }
 
-.input-field {
-	/*margin: 0 0 5% 5%;*/
+.rows-field {
+	font-size: small;
 	box-sizing: border-box;
-	width: 40%;
-	height: 5em;
+	width: 46%;
+	height: 6em;
+}
+
+.columns-field {
+	font-size: small;
+	box-sizing: border-box;
+	width: 54%;
+	height: 6em;
 }
 
 .input-field-container {

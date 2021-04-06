@@ -1,7 +1,7 @@
 package jalmeida.pathfindingvisualizer.algorithms;
 
-import jalmeida.pathfindingvisualizer.views.pathfindingvisualizer.GridContainer;
-import jalmeida.pathfindingvisualizer.views.pathfindingvisualizer.GridSquare;
+import jalmeida.pathfindingvisualizer.views.pathfindingvisualizer.grid.GridContainer;
+import jalmeida.pathfindingvisualizer.views.pathfindingvisualizer.grid.GridSquare;
 
 import java.util.ArrayList;
 import java.util.Stack;
@@ -24,14 +24,15 @@ public class DepthFirst extends Algorithm {
         GridSquare currNode;
         while (!stack.isEmpty()) {
             currNode = stack.pop();
-            currNode.setAsSearched();
+            ui.access(currNode::setAsSearched);
             if (currNode.isEndPoint())
                 break;
 
             neighbours = gridContainer.getNeighbours(currNode);
             for (int i = neighbours.size() - 1; i >= 0; i--)
                 if (!neighbours.get(i).isSearched()) {
-                    neighbours.get(i).setAsToSearch();
+                    final GridSquare toUpdate = neighbours.get(i);
+                    ui.access(toUpdate::setAsToSearch);
                     stack.push(neighbours.get(i));
                 }
         }
