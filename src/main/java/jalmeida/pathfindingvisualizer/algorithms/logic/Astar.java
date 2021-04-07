@@ -24,22 +24,31 @@ public class Astar extends Algorithm {
 
         while (!openList.isEmpty()) {
             Node n = openList.peek();
-            if (n.getSquare() == endPoint) {
+            if (n.getSquare().isEndPoint()) {
+                System.out.println("Found solution!");
                 paintSolution(n);
                 return;
+            }
+
+            if (n.getNeighbours().size() == 0) {
+                ArrayList<GridSquare> gridNeighbours = gridContainer.getNeighbours(n.getSquare());
+
+                if (n.getParent() != null)
+                    gridNeighbours.remove(n.getParent().getSquare());
+
+                for (GridSquare g : gridNeighbours) { n.addBranch(g); }
             }
 
             ArrayList<Node.Neighbour> neighbours = n.getNeighbours();
             for (Node.Neighbour neighbour : neighbours) {
                 Node m = neighbour.getNode();
                 double totalWeight = n.getGValue() + neighbour.getWeight();
-
-                if(!openList.contains(m) && !closedList.contains(m)){
+                if(!(openList.contains(m) || closedList.contains(m))) {
+                    m.configure(n, totalWeight, totalWeight + m.getHeuristic(endPoint));
                     openList.add(m);
                     m.getSquare().setAsToSearch();
                 } else if (totalWeight < m.getGValue()){
-                    m.configure(n, totalWeight, m.getGValue() + m.getHeuristic(endPoint));
-
+                    m.configure(n, totalWeight, totalWeight + m.getHeuristic(endPoint));
                     if (closedList.contains(m)) {
                         closedList.remove(m);
                         openList.add(m);
@@ -54,18 +63,24 @@ public class Astar extends Algorithm {
     }
 
     private void paintSolution(Node n) {
-        Node parent;
-        while ((parent = n.getParent()) != null) { parent.getSquare().setAsSolution(); }
+        Node parent = n;
+        while (true) {
+            parent = n.getParent();
+            if (parent.getSquare().isStartPoint())
+                break;
+
+            parent.getSquare().setAsSolution();
+        }
     }
 }
 
 class Node implements Comparable<Node>  {
 
     private Node parentNode;
-    private GridSquare gridSquare;
+    private final GridSquare gridSquare;
     private double g;
     private double f;
-    private ArrayList<Neighbour> neighbours;
+    private final ArrayList<Neighbour> neighbours;
 
     public Node(GridSquare gridSquare) {
         this.gridSquare = gridSquare;
@@ -95,20 +110,16 @@ class Node implements Comparable<Node>  {
     public double getGValue() { return g; }
 
     public static class Neighbour {
-        private GridSquare gridSquare;
         private Node node;
 
-        public Neighbour(GridSquare gridSquare, Node node){
-            this.gridSquare = gridSquare;
-            this.node = node;
-        }
+        public Neighbour(GridSquare gridSquare){ this.node = new Node(gridSquare); }
 
-        public int getWeight() { return gridSquare.getCost(); }
+        public int getWeight() { return node.getSquare().getCost(); }
         public Node getNode() { return node; }
     }
 
-    public void addBranch(GridSquare gridSquare, Node node){
-        Neighbour neighbour = new Neighbour(gridSquare, node);
+    public void addBranch(GridSquare n) {
+        Neighbour neighbour = new Neighbour(n);
         neighbours.add(neighbour);
     }
 

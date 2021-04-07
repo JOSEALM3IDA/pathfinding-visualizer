@@ -122,6 +122,8 @@ public class GridContainer {
     public void solve() {
         if (currAlgorithm != null) {
             clearSolution();
+            currAlgorithm.setStartPoint(startPoint);
+            currAlgorithm.setEndPoint(endPoint);
             currAlgorithm.solve();
             isSolved = true;
         }
