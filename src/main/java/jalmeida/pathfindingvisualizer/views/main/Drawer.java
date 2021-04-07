@@ -20,8 +20,8 @@ import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.router.Route;
 import jalmeida.pathfindingvisualizer.algorithms.Algorithm;
-import jalmeida.pathfindingvisualizer.algorithms.BreadthFirst;
-import jalmeida.pathfindingvisualizer.algorithms.DepthFirst;
+import jalmeida.pathfindingvisualizer.algorithms.logic.BreadthFirst;
+import jalmeida.pathfindingvisualizer.algorithms.logic.DepthFirst;
 import jalmeida.pathfindingvisualizer.views.pathfindingvisualizer.grid.GridContainer;
 
 import java.util.ArrayList;

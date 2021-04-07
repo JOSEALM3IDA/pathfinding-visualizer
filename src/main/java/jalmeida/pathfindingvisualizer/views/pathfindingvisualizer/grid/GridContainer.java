@@ -3,7 +3,6 @@ package jalmeida.pathfindingvisualizer.views.pathfindingvisualizer.grid;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Div;
 import jalmeida.pathfindingvisualizer.algorithms.Algorithm;
-import jalmeida.pathfindingvisualizer.algorithms.SolverThread;
 import org.atmosphere.inject.annotation.ApplicationScoped;
 
 import java.util.ArrayList;
@@ -123,8 +122,7 @@ public class GridContainer {
     public void solve() {
         if (currAlgorithm != null) {
             clearSolution();
-            SolverThread st = new SolverThread(currAlgorithm, container.getUI().get());
-            st.start();
+            currAlgorithm.solve();
             isSolved = true;
         }
     }
@@ -144,10 +142,6 @@ public class GridContainer {
         } catch (NullPointerException ignored) {}
 
         startPoint = gridSquare;
-
-        if (isSolved())
-            solve();
-
     }
 
     public void setEndPoint(GridSquare gridSquare) {
@@ -156,9 +150,6 @@ public class GridContainer {
         } catch (NullPointerException ignored) {}
 
         endPoint = gridSquare;
-
-        if (isSolved())
-            solve();
     }
 
     public void setCurrAlgorithm(Algorithm algorithm) {
@@ -179,11 +170,18 @@ public class GridContainer {
         isActiveStartPointDrag.set(value);
         setGrabbing(value);
         startPoint.setGrab(!value);
+
+        if (!value && isSolved)
+            solve();
     }
+
     public void setActiveEndPointDrag(boolean value) {
         isActiveEndPointDrag.set(value);
         setGrabbing(value);
         endPoint.setGrab(!value);
+
+        if (!value && isSolved)
+            solve();
     }
 
     public GridSquare getSquareAt(int row, int col) { return gridSquares.get(row * nCols + col); }

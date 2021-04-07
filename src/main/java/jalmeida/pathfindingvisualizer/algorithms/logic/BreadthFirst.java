@@ -1,5 +1,6 @@
-package jalmeida.pathfindingvisualizer.algorithms;
+package jalmeida.pathfindingvisualizer.algorithms.logic;
 
+import jalmeida.pathfindingvisualizer.algorithms.Algorithm;
 import jalmeida.pathfindingvisualizer.views.pathfindingvisualizer.grid.GridContainer;
 import jalmeida.pathfindingvisualizer.views.pathfindingvisualizer.grid.GridSquare;
 
@@ -25,7 +26,7 @@ public class BreadthFirst extends Algorithm {
         while (queue.size() > 0) {
             currNode = queue.poll();
             while(queue.remove(currNode));
-            ui.access(currNode::setAsSearched);
+            currNode.setAsSearched();
 
             if (currNode.isEndPoint())
                 break;
@@ -33,7 +34,7 @@ public class BreadthFirst extends Algorithm {
             neighbours = gridContainer.getNeighbours(currNode);
             for (GridSquare neighbour : neighbours)
                 if (!neighbour.isSearched()) {
-                    ui.access(neighbour::setAsToSearch);
+                    neighbour.setAsToSearch();
                     queue.add(neighbour);
                 }
         }

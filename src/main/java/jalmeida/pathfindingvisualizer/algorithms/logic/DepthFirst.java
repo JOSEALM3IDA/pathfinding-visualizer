@@ -1,5 +1,6 @@
-package jalmeida.pathfindingvisualizer.algorithms;
+package jalmeida.pathfindingvisualizer.algorithms.logic;
 
+import jalmeida.pathfindingvisualizer.algorithms.Algorithm;
 import jalmeida.pathfindingvisualizer.views.pathfindingvisualizer.grid.GridContainer;
 import jalmeida.pathfindingvisualizer.views.pathfindingvisualizer.grid.GridSquare;
 
