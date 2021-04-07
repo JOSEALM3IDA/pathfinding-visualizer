@@ -61,3 +61,7 @@ div[class^="grid-s-"], div[class*=" grid-s-"] {
 .grid-s-searched {
 	background-color: #267cb5;
 }
+
+.grid-solution {
+	background-color: #00ba34;
+}

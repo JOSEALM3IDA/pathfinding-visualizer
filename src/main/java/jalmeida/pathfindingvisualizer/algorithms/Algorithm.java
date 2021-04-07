@@ -21,18 +21,6 @@ public abstract class Algorithm {
     public void setStartPoint(GridSquare startPoint) { this.startPoint = startPoint; }
     public void setEndPoint(GridSquare endPoint) { this.endPoint = endPoint; }
 
-    protected float getEstimation(GridSquare start, GridSquare end) {
-        int[] startPos = gridContainer.getPosOfSquare(start);
-        int[] endPos = gridContainer.getPosOfSquare(end);
-
-        int x1 = startPos[0];
-        int x2 = endPos[0];
-        int y1 = startPos[1];
-        int y2 = endPos[1];
-
-        return (float) Math.sqrt(Math.pow(x1-x2, 2) + Math.pow(y2-y1, 2));
-    }
-
     protected void sleep() {
         try {
             Thread.sleep(WAIT_TIME);

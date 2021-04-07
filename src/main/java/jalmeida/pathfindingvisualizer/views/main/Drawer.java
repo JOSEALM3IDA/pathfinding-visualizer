@@ -20,6 +20,7 @@ import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.router.Route;
 import jalmeida.pathfindingvisualizer.algorithms.Algorithm;
+import jalmeida.pathfindingvisualizer.algorithms.logic.Astar;
 import jalmeida.pathfindingvisualizer.algorithms.logic.BreadthFirst;
 import jalmeida.pathfindingvisualizer.algorithms.logic.DepthFirst;
 import jalmeida.pathfindingvisualizer.views.pathfindingvisualizer.grid.GridContainer;
@@ -202,6 +203,9 @@ public class Drawer extends AppLayout {
         algorithmSelect.addValueChangeListener(e -> {
             Algorithm algorithm;
             switch (algorithmSelect.getValue()) {
+                case A_STAR:
+                    algorithm = new Astar(gridContainer);
+                    break;
                 case BREADTH_FIRST:
                     algorithm = new BreadthFirst(gridContainer);
                     break;

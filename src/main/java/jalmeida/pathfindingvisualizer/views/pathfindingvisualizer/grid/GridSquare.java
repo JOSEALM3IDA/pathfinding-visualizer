@@ -16,6 +16,7 @@ public class GridSquare {
     private static final String END_POINT_CLASS = "grid-end-point";
     private static final String TO_SEARCH_CLASS = "grid-s-to-search";
     private static final String SEARCHED_CLASS = "grid-s-searched";
+    private static final String SOLUTION_CLASS = "grid-solution";
 
     private Div container;
     private String currClass;
@@ -84,6 +85,7 @@ public class GridSquare {
     public void setAsObstacle() { setClass(OBSTACLE_CLASS); }
     public void setAsToSearch() { if (!(isStartPoint() || isEndPoint())) setClass(TO_SEARCH_CLASS); }
     public void setAsSearched() { if (!(isStartPoint() || isEndPoint())) setClass(SEARCHED_CLASS); }
+    public void setAsSolution() { if (!(isStartPoint() || isEndPoint())) setClass(SOLUTION_CLASS); }
 
     public boolean setAsStartPoint() {
         if (isEndPoint())
@@ -132,6 +134,7 @@ public class GridSquare {
         container.removeClassName(OBSTACLE_CLASS);
         container.removeClassName(SEARCHED_CLASS);
         container.removeClassName(TO_SEARCH_CLASS);
+        container.removeClassName(SOLUTION_CLASS);
     }
 
     public Div getContainer() {
@@ -150,7 +153,19 @@ public class GridSquare {
     }
 
     public void resetSolution() {
-        if (currClass.equals(SEARCHED_CLASS) || currClass.equals(TO_SEARCH_CLASS))
+        if (currClass.equals(SEARCHED_CLASS) || currClass.equals(TO_SEARCH_CLASS) || currClass.equals(SOLUTION_CLASS))
             setClass(DEFAULT_CLASS);
+    }
+
+    public double getDistanceTo(GridSquare target) {
+        int[] startPos = grid.getPosOfSquare(this);
+        int[] endPos = grid.getPosOfSquare(target);
+
+        int x1 = startPos[0];
+        int x2 = endPos[0];
+        int y1 = startPos[1];
+        int y2 = endPos[1];
+
+        return Math.sqrt(Math.pow(x1-x2, 2) + Math.pow(y2-y1, 2));
     }
 }

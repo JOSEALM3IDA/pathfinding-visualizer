@@ -25,15 +25,17 @@ public class DepthFirst extends Algorithm {
         GridSquare currNode;
         while (!stack.isEmpty()) {
             currNode = stack.pop();
-            ui.access(currNode::setAsSearched);
+            //ui.access(currNode::setAsSearched);
+            currNode.setAsSearched();
             if (currNode.isEndPoint())
                 break;
 
             neighbours = gridContainer.getNeighbours(currNode);
             for (int i = neighbours.size() - 1; i >= 0; i--)
                 if (!neighbours.get(i).isSearched()) {
-                    final GridSquare toUpdate = neighbours.get(i);
-                    ui.access(toUpdate::setAsToSearch);
+                    //final GridSquare toUpdate = neighbours.get(i);
+                    //ui.access(toUpdate::setAsToSearch);
+                    neighbours.get(i).setAsToSearch();
                     stack.push(neighbours.get(i));
                 }
         }
