@@ -11,9 +11,9 @@ import java.util.PriorityQueue;
 
 public class Astar extends Algorithm {
 
-    private final PriorityQueue<Node> openSet = new PriorityQueue<>();
-    private final HashMap<Node, Node> cameFrom = new HashMap<>();
-    private final HashMap<Node, Double> gScore = new HashMap<>();
+    protected final PriorityQueue<Node> openSet = new PriorityQueue<>();
+    protected final HashMap<Node, Node> cameFrom = new HashMap<>();
+    protected final HashMap<Node, Double> gScore = new HashMap<>();
 
     public Astar(GridContainer gridContainer) { super(gridContainer); }
 
@@ -32,9 +32,6 @@ public class Astar extends Algorithm {
                 paintSolution();
                 return;
             }
-
-            int[] pos = gridContainer.getPosOfSquare(current.getSquare());
-            System.out.println("{" + pos[0] + "," + pos[1]  + "}");
 
             removeNode(current);
 
@@ -71,7 +68,7 @@ public class Astar extends Algorithm {
     private void updateNode(Node child, Node parent, double g) {
         cameFrom.put(child, parent);
         gScore.put(child, g);
-        child.setF(g + child.getSquare().getDistanceTo(endPoint));
+        child.setF(g + getEstimatedCost(child));
     }
 
     private void paintSolution() {
@@ -81,5 +78,7 @@ public class Astar extends Algorithm {
             last.getSquare().setAsSolution();
         }
     }
+
+    protected double getEstimatedCost(Node node) { return node.getSquare().getDistanceTo(endPoint); }
 }
 

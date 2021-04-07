@@ -23,6 +23,7 @@ import jalmeida.pathfindingvisualizer.logic.Algorithm;
 import jalmeida.pathfindingvisualizer.logic.algorithms.Astar;
 import jalmeida.pathfindingvisualizer.logic.algorithms.BreadthFirst;
 import jalmeida.pathfindingvisualizer.logic.algorithms.DepthFirst;
+import jalmeida.pathfindingvisualizer.logic.algorithms.Dijkstras;
 import jalmeida.pathfindingvisualizer.views.pathfindingvisualizer.grid.GridContainer;
 
 import java.util.ArrayList;
@@ -39,6 +40,7 @@ public class Drawer extends AppLayout {
     private static final String DEPTH_FIRST = "Depth-First Search";
     private static final String BREADTH_FIRST = "Breadth-First Search";
     private static final String A_STAR = "A*";
+    private static final String DIJKSTRAS = "Dijktra's";
 
     private Label optionsLabel;
     private IntegerField colsField;
@@ -199,20 +201,25 @@ public class Drawer extends AppLayout {
     private VerticalLayout getSelectLayout() {
         algorithmSelect = new Select<>();
         algorithmSelect.setLabel("Algorithm");
-        algorithmSelect.setItems(DEPTH_FIRST, BREADTH_FIRST, A_STAR);
+        algorithmSelect.setItems(DEPTH_FIRST, BREADTH_FIRST, A_STAR, DIJKSTRAS);
         algorithmSelect.addValueChangeListener(e -> {
             Algorithm algorithm;
             switch (algorithmSelect.getValue()) {
-                case A_STAR:
-                    algorithm = new Astar(gridContainer);
+                default:
+                case DEPTH_FIRST:
+                    algorithm = new DepthFirst(gridContainer);
                     break;
+
                 case BREADTH_FIRST:
                     algorithm = new BreadthFirst(gridContainer);
                     break;
 
-                default:
-                case DEPTH_FIRST:
-                    algorithm = new DepthFirst(gridContainer);
+                case A_STAR:
+                    algorithm = new Astar(gridContainer);
+                    break;
+
+                case DIJKSTRAS:
+                    algorithm = new Dijkstras(gridContainer);
                     break;
             }
             gridContainer.setCurrAlgorithm(algorithm);
