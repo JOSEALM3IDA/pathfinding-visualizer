@@ -1,4 +1,4 @@
-package jalmeida.pathfindingvisualizer.algorithms;
+package jalmeida.pathfindingvisualizer.logic;
 
 import com.vaadin.flow.component.UI;
 import jalmeida.pathfindingvisualizer.views.pathfindingvisualizer.grid.GridContainer;

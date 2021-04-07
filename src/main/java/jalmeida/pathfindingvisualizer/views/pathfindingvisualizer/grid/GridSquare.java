@@ -3,6 +3,7 @@ package jalmeida.pathfindingvisualizer.views.pathfindingvisualizer.grid;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.dom.DomListenerRegistration;
+import jalmeida.pathfindingvisualizer.logic.Node;
 
 import java.util.ArrayList;
 
@@ -24,10 +25,12 @@ public class GridSquare {
     private ArrayList<DomListenerRegistration> listeners;
     private GridContainer grid;
 
-    private int cost;
+    private Node node;
 
     public GridSquare(GridContainer grid) {
         this.grid = grid;
+        this.node = new Node(this);
+        node.setCost(1);
 
         container = new Div();
         container.setClassName("grid-square");
@@ -36,8 +39,6 @@ public class GridSquare {
         listeners = new ArrayList<>();
 
         attachListeners();
-
-        cost = 1;
     }
 
     private void attachListeners() {
@@ -141,7 +142,7 @@ public class GridSquare {
         return container;
     }
 
-    public int getCost() { return cost; }
+    public Node getNode() { return node; }
 
     public void reset() {
         setClass(DEFAULT_CLASS);
@@ -155,6 +156,9 @@ public class GridSquare {
     public void resetSolution() {
         if (currClass.equals(SEARCHED_CLASS) || currClass.equals(TO_SEARCH_CLASS) || currClass.equals(SOLUTION_CLASS))
             setClass(DEFAULT_CLASS);
+
+        if (isStartPoint() || isEndPoint())
+            oldClass = DEFAULT_CLASS;
     }
 
     public double getDistanceTo(GridSquare target) {

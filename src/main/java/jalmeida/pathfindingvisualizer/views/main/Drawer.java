@@ -19,10 +19,10 @@ import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.router.Route;
-import jalmeida.pathfindingvisualizer.algorithms.Algorithm;
-import jalmeida.pathfindingvisualizer.algorithms.logic.Astar;
-import jalmeida.pathfindingvisualizer.algorithms.logic.BreadthFirst;
-import jalmeida.pathfindingvisualizer.algorithms.logic.DepthFirst;
+import jalmeida.pathfindingvisualizer.logic.Algorithm;
+import jalmeida.pathfindingvisualizer.logic.algorithms.Astar;
+import jalmeida.pathfindingvisualizer.logic.algorithms.BreadthFirst;
+import jalmeida.pathfindingvisualizer.logic.algorithms.DepthFirst;
 import jalmeida.pathfindingvisualizer.views.pathfindingvisualizer.grid.GridContainer;
 
 import java.util.ArrayList;

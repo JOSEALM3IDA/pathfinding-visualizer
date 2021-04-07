@@ -2,7 +2,7 @@ package jalmeida.pathfindingvisualizer.views.pathfindingvisualizer.grid;
 
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Div;
-import jalmeida.pathfindingvisualizer.algorithms.Algorithm;
+import jalmeida.pathfindingvisualizer.logic.Algorithm;
 import org.atmosphere.inject.annotation.ApplicationScoped;
 
 import java.util.ArrayList;
@@ -139,6 +139,9 @@ public class GridContainer {
     }
 
     public void setStartPoint(GridSquare gridSquare) {
+        if (startPoint == gridSquare)
+            return;
+
         try {
             startPoint.setAsLastState();
         } catch (NullPointerException ignored) {}
@@ -147,6 +150,9 @@ public class GridContainer {
     }
 
     public void setEndPoint(GridSquare gridSquare) {
+        if (endPoint == gridSquare)
+            return;
+
         try {
             endPoint.setAsLastState();
         } catch (NullPointerException ignored) {}
