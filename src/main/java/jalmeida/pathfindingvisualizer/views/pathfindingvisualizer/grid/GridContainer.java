@@ -104,7 +104,6 @@ public class GridContainer {
     }
 
     public void clearGrid() {
-
         for (GridSquare sqr : gridSquares)
             sqr.reset();
 
@@ -279,4 +278,13 @@ public class GridContainer {
     //public boolean isActiveEndPointPlacement() { return isActiveEndPointPlacement.get(); }
     public boolean isActiveStartPointDrag() { return isActiveStartPointDrag.get(); }
     public boolean isActiveEndPointDrag() { return isActiveEndPointDrag.get(); }
+
+    public void addRandomObstacles(double chance) {
+        clearSolution();
+        clearObstacles();
+
+        for (GridSquare gridSquare : gridSquares)
+            if (!(gridSquare.isEndPoint() || gridSquare.isStartPoint()) && Math.random() < chance)
+                gridSquare.setAsObstacle();
+    }
 }

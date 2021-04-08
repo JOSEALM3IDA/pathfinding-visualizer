@@ -46,8 +46,7 @@ public class Drawer extends AppLayout {
     private IntegerField colsField;
     private IntegerField rowsField;
     private Button resetObstaclesButton;
-    //private Button setStartPointButton;
-    //private Button setEndPointButton;
+    private Button randomObstaclesButton;
     private Button startButton;
     private Button clearButton;
     private Checkbox obstacleCheckbox;
@@ -56,7 +55,6 @@ public class Drawer extends AppLayout {
     private Label extraLabel;
     private Label operatorOrderLabel;
     private ArrayList<IntegerField> operatorOrderFields;
-    private String operatorOrder;
 
     private final GridContainer gridContainer;
     private final Component drawerContent;
@@ -151,33 +149,11 @@ public class Drawer extends AppLayout {
         hLayout.add(startButton);
         hLayout.add(clearButton);
 
-        /*
-        setStartPointButton = new Button("Set Start Point");
-        setStartPointButton.addClickListener(e -> {
-            if (!gridContainer.isActiveStartPointPlacement()) {
-                setStartPointPlacement(true);
-                setEndPointPlacement(false);
-            } else {
-                setStartPointPlacement(false);
-            }
-        });
-
-        setEndPointButton = new Button("Set End Point");
-        setEndPointButton.addClickListener(e -> {
-            if (!gridContainer.isActiveEndPointPlacement()) {
-                setEndPointPlacement(true);
-                setStartPointPlacement(false);
-            } else {
-                setEndPointPlacement(false);
-            }
-        });*/
-
         resetObstaclesButton = new Button("Reset Obstacles");
         resetObstaclesButton.addClickListener(e -> gridContainer.clearObstacles());
 
         VerticalLayout vLayout = new VerticalLayout();
         vLayout.setClassName("button-container");
-        //vLayout.add(setStartPointButton, setEndPointButton, hLayout, resetObstaclesButton);
         vLayout.add(hLayout, resetObstaclesButton);
 
         return vLayout;
@@ -207,18 +183,22 @@ public class Drawer extends AppLayout {
             switch (algorithmSelect.getValue()) {
                 default:
                 case DEPTH_FIRST:
+                    setOperatorOrderVisibility(true);
                     algorithm = new DepthFirst(gridContainer);
                     break;
 
                 case BREADTH_FIRST:
+                    setOperatorOrderVisibility(true);
                     algorithm = new BreadthFirst(gridContainer);
                     break;
 
                 case A_STAR:
+                    setOperatorOrderVisibility(false);
                     algorithm = new Astar(gridContainer);
                     break;
 
                 case DIJKSTRAS:
+                    setOperatorOrderVisibility(false);
                     algorithm = new Dijkstras(gridContainer);
                     break;
             }
@@ -247,7 +227,7 @@ public class Drawer extends AppLayout {
         operatorOrderLabel.addClassName("subtitle-label");
         vLayout.add(operatorOrderLabel);
 
-        operatorOrderFields = new ArrayList<IntegerField>(4);
+        operatorOrderFields = new ArrayList<>(4);
         operatorOrderFields.add(new IntegerField("Up"));
         operatorOrderFields.add(new IntegerField("Down"));
         operatorOrderFields.add(new IntegerField("Left"));
@@ -257,8 +237,6 @@ public class Drawer extends AppLayout {
         operatorOrderFields.get(1).setValue(3);
         operatorOrderFields.get(2).setValue(4);
         operatorOrderFields.get(3).setValue(2);
-
-        operatorOrder = "UDLR";
 
         for (IntegerField f : operatorOrderFields) {
             f.setClassName("operator-num-field");
@@ -273,14 +251,27 @@ public class Drawer extends AppLayout {
         hLayout.add(operatorOrderFields.get(1));
         vLayout.add(hLayout);
 
-
         HorizontalLayout hLayout2 = new HorizontalLayout();
         hLayout2.setClassName("operator-num-field-pair");
         hLayout2.add(operatorOrderFields.get(2));
         hLayout2.add(operatorOrderFields.get(3));
         vLayout.add(hLayout2);
 
+
+        randomObstaclesButton = new Button("Add Random Obstacles");
+        randomObstaclesButton.addClickListener(e -> gridContainer.addRandomObstacles(0.25));
+        vLayout.add(randomObstaclesButton);
+
         return vLayout;
+    }
+
+    private void setOperatorOrderVisibility(boolean value) {
+        if (operatorOrderFields == null)
+            return;
+
+        operatorOrderLabel.setVisible(value);
+        for (IntegerField operatorOrderField : operatorOrderFields)
+            operatorOrderField.setVisible(value);
     }
 
     private void updateOperatorOrder() {
@@ -348,25 +339,6 @@ public class Drawer extends AppLayout {
         obstacleCheckbox.setValue(value);
         gridContainer.setActiveObstaclePlacement(value);
     }
-
-    /*
-    private void setStartPointPlacement(boolean value) {
-        if (value)
-            gridContainer.getContainer().addClassName("cursor-crosshair-start");
-        else
-            gridContainer.getContainer().removeClassName("cursor-crosshair-start");
-
-        gridContainer.setActiveStartPointPlacement(value);
-    }
-
-    private void setEndPointPlacement(boolean value) {
-        if (value)
-            gridContainer.getContainer().addClassName("cursor-crosshair-end");
-        else
-            gridContainer.getContainer().removeClassName("cursor-crosshair-end");
-
-        gridContainer.setActiveEndPointPlacement(value);
-    }*/
 
     private void throwErrorNotification(String msg) {
         Notification notification = new Notification(msg);
