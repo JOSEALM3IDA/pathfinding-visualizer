@@ -1,9 +1,11 @@
 package jalmeida.pathfindingvisualizer.views.main;
 
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.HtmlComponent;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.Checkbox;
+import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.html.Hr;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.H1;
@@ -18,6 +20,7 @@ import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.dependency.CssImport;
+import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.router.Route;
 import jalmeida.pathfindingvisualizer.logic.Algorithm;
 import jalmeida.pathfindingvisualizer.logic.algorithms.Astar;
@@ -26,9 +29,7 @@ import jalmeida.pathfindingvisualizer.logic.algorithms.DepthFirst;
 import jalmeida.pathfindingvisualizer.logic.algorithms.Dijkstras;
 import jalmeida.pathfindingvisualizer.views.pathfindingvisualizer.grid.GridContainer;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.*;
 
 @Push
 @Route("push")
@@ -46,7 +47,6 @@ public class Drawer extends AppLayout {
     private IntegerField colsField;
     private IntegerField rowsField;
     private Button resetObstaclesButton;
-    private Button randomObstaclesButton;
     private Button startButton;
     private Button clearButton;
     private Checkbox obstacleCheckbox;
@@ -55,6 +55,11 @@ public class Drawer extends AppLayout {
     private Label extraLabel;
     private Label operatorOrderLabel;
     private ArrayList<IntegerField> operatorOrderFields;
+    private Button randomObstaclesButton;
+    private Button loadButton;
+    private Button saveButton;
+    private Dialog saveDialog;
+    private TextArea gridText;
 
     private final GridContainer gridContainer;
     private final Component drawerContent;
@@ -202,6 +207,7 @@ public class Drawer extends AppLayout {
                     algorithm = new Dijkstras(gridContainer);
                     break;
             }
+
             gridContainer.setCurrAlgorithm(algorithm);
         });
 
@@ -257,10 +263,39 @@ public class Drawer extends AppLayout {
         hLayout2.add(operatorOrderFields.get(3));
         vLayout.add(hLayout2);
 
+        saveDialog = new Dialog();
+        saveDialog.setWidth("50vw");
+        saveDialog.setHeight("50vh");
+        saveDialog.add("Here's your grid configuration:");
+
+        saveDialog.add(new HtmlComponent("br"));
+        saveDialog.add(new HtmlComponent("br"));
+
+        gridText = new TextArea();
+        gridText.addClassName("no-wrap");
+        gridText.setWidth("100%");
+        gridText.setHeight("85%");
+        saveDialog.add(gridText);
 
         randomObstaclesButton = new Button("Add Random Obstacles");
         randomObstaclesButton.addClickListener(e -> gridContainer.addRandomObstacles(0.25));
         vLayout.add(randomObstaclesButton);
+
+        HorizontalLayout hLayout3 = new HorizontalLayout();
+
+        loadButton = new Button("Load");
+        hLayout3.add(loadButton);
+
+
+        saveButton = new Button("Save");
+        saveButton.addClickListener(e -> {
+            gridText.setValue(gridContainer.toString());
+            saveDialog.open();
+        });
+
+        hLayout3.add(saveButton);
+
+        vLayout.add(hLayout3);
 
         return vLayout;
     }

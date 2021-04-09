@@ -29,8 +29,6 @@ public class GridContainer {
     private boolean isSolved;
     private final AtomicBoolean isMousePressed;
     private final AtomicBoolean isActiveObstaclePlacement;
-    //private final AtomicBoolean isActiveStartPointPlacement;
-    //private final AtomicBoolean isActiveEndPointPlacement;
     private final AtomicBoolean isActiveStartPointDrag;
     private final AtomicBoolean isActiveEndPointDrag;
 
@@ -54,8 +52,6 @@ public class GridContainer {
 
         isSolved = false;
 
-        //isActiveStartPointPlacement = new AtomicBoolean(false);
-        //isActiveEndPointPlacement = new AtomicBoolean(false);
         isActiveStartPointDrag = new AtomicBoolean(false);
         isActiveEndPointDrag = new AtomicBoolean(false);
 
@@ -89,7 +85,6 @@ public class GridContainer {
     private void initializeStartEndPoints() {
         Random rn = new Random();
 
-        //if (isActiveStartPointPlacement == null || isActiveEndPointPlacement == null || nCols * nRows < 2)
         if (nCols * nRows < 2)
             return;
 
@@ -171,8 +166,6 @@ public class GridContainer {
     }
 
     public void setActiveObstaclePlacement(boolean value) { isActiveObstaclePlacement.set(value); }
-    //public void setActiveStartPointPlacement(boolean value) { isActiveStartPointPlacement.set(value); }
-    //public void setActiveEndPointPlacement(boolean value) { isActiveEndPointPlacement.set(value); }
     public void setActiveStartPointDrag(boolean value) {
         isActiveStartPointDrag.set(value);
         setGrabbing(value);
@@ -274,8 +267,6 @@ public class GridContainer {
     public boolean isSolved() { return isSolved; }
 
     public boolean isActiveObstaclePlacement() { return isActiveObstaclePlacement.get(); }
-    //public boolean isActiveStartPointPlacement() { return isActiveStartPointPlacement.get(); }
-    //public boolean isActiveEndPointPlacement() { return isActiveEndPointPlacement.get(); }
     public boolean isActiveStartPointDrag() { return isActiveStartPointDrag.get(); }
     public boolean isActiveEndPointDrag() { return isActiveEndPointDrag.get(); }
 
@@ -286,5 +277,28 @@ public class GridContainer {
         for (GridSquare gridSquare : gridSquares)
             if (!(gridSquare.isEndPoint() || gridSquare.isStartPoint()) && Math.random() < chance)
                 gridSquare.setAsObstacle();
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder rtn = new StringBuilder();
+
+        rtn.append(nCols);
+        rtn.append('\n');
+        rtn.append(nRows);
+        rtn.append("\n\n");
+
+        for (int row = 0; row < nRows; row++) {
+            for (int col = 0; col < nCols; col++) {
+                rtn.append(getSquareAt(row, col).toString());
+                if (col != nCols - 1)
+                    rtn.append(' ');
+            }
+
+            if (row != nRows - 1)
+                rtn.append('\n');
+        }
+
+        return rtn.toString();
     }
 }

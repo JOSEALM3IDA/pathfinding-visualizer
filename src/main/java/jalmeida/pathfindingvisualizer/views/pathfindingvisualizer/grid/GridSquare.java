@@ -172,4 +172,19 @@ public class GridSquare {
 
         return Math.sqrt(Math.pow(x1-x2, 2) + Math.pow(y2-y1, 2));
     }
+
+    @Override
+    public String toString() {
+        switch (currClass) {
+            default:
+            case DEFAULT_CLASS:
+                return Integer.toString(node.getCost());
+            case OBSTACLE_CLASS:
+                return "-";
+            case START_POINT_CLASS:
+                return "S";
+            case END_POINT_CLASS:
+                return "E";
+        }
+    }
 }

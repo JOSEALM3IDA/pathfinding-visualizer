@@ -106,3 +106,9 @@ vaadin-tab[selected] {
 .operator-num-field {
 	width: 50%;
 }
+
+.no-wrap {
+	white-space: nowrap;
+	overflow-x: auto;
+	padding-bottom: 1em;
+}
