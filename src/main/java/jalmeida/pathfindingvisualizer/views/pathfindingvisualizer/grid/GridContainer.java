@@ -7,6 +7,7 @@ import org.atmosphere.inject.annotation.ApplicationScoped;
 
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Vector;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 @CssImport("./grid.css")
@@ -69,7 +70,9 @@ public class GridContainer {
 
     public void setRows(int rows) { this.nRows = rows; }
 
-    public void redrawGrid() {
+    public void redrawGrid() { redrawGrid(true); }
+
+    public void redrawGrid(boolean doPointInit) {
         container.removeAll();
         container.getElement().executeJs("document.getElementById(" +
                 "\"grid-container-id\").style.gridTemplateColumns = \"repeat("
@@ -79,7 +82,8 @@ public class GridContainer {
         for (int i = 0; i < nCols * nRows; i++)
             addSquare();
 
-        initializeStartEndPoints();
+        if (doPointInit)
+            initializeStartEndPoints();
     }
 
     private void initializeStartEndPoints() {
@@ -279,20 +283,24 @@ public class GridContainer {
                 gridSquare.setAsObstacle();
     }
 
+    public void loadFromCharMatrix(ArrayList<ArrayList<Character>> info) {
+        setRows(info.size());
+        setCols(info.get(0).size());
+        redrawGrid(false);
+
+        for (int row = 0; row < nRows; row++)
+            for (int col = 0; col < nCols; col++)
+                getSquareAt(row, col).setFromValue(info.get(row).get(col));
+
+    }
+
     @Override
     public String toString() {
         StringBuilder rtn = new StringBuilder();
 
-        rtn.append(nCols);
-        rtn.append('\n');
-        rtn.append(nRows);
-        rtn.append("\n\n");
-
         for (int row = 0; row < nRows; row++) {
             for (int col = 0; col < nCols; col++) {
                 rtn.append(getSquareAt(row, col).toString());
-                if (col != nCols - 1)
-                    rtn.append(' ');
             }
 
             if (row != nRows - 1)

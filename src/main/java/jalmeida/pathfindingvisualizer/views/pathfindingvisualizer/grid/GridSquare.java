@@ -93,9 +93,6 @@ public class GridSquare {
             return false;
 
         setClass(START_POINT_CLASS);
-        //grid.getContainer().removeClassName("cursor-crosshair-start");
-        //grid.setActiveStartPointPlacement(false);
-        //setGrab(true);
         if (!grid.isActiveStartPointDrag())
             setGrab(true);
 
@@ -109,8 +106,6 @@ public class GridSquare {
             return false;
 
         setClass(END_POINT_CLASS);
-        //grid.getContainer().removeClassName("cursor-crosshair-end");
-        //grid.setActiveEndPointPlacement(false);
         if (!grid.isActiveEndPointDrag())
             setGrab(true);
 
@@ -173,18 +168,25 @@ public class GridSquare {
         return Math.sqrt(Math.pow(x1-x2, 2) + Math.pow(y2-y1, 2));
     }
 
+    public void setFromValue(Character ch) {
+        switch (ch) {
+            case '-' -> setAsObstacle();
+            case 'S' -> setAsStartPoint();
+            case 'E' -> setAsEndPoint();
+            default -> {
+                setClass(DEFAULT_CLASS);
+                node.setCost(Character.getNumericValue(ch));
+            }
+        }
+    }
+
     @Override
     public String toString() {
-        switch (currClass) {
-            default:
-            case DEFAULT_CLASS:
-                return Integer.toString(node.getCost());
-            case OBSTACLE_CLASS:
-                return "-";
-            case START_POINT_CLASS:
-                return "S";
-            case END_POINT_CLASS:
-                return "E";
-        }
+        return switch (currClass) {
+            case OBSTACLE_CLASS -> "-";
+            case START_POINT_CLASS -> "S";
+            case END_POINT_CLASS -> "E";
+            default -> Integer.toString(node.getCost());
+        };
     }
 }

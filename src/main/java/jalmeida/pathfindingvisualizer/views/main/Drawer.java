@@ -2,6 +2,7 @@ package jalmeida.pathfindingvisualizer.views.main;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HtmlComponent;
+import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.Checkbox;
@@ -29,6 +30,7 @@ import jalmeida.pathfindingvisualizer.logic.algorithms.DepthFirst;
 import jalmeida.pathfindingvisualizer.logic.algorithms.Dijkstras;
 import jalmeida.pathfindingvisualizer.views.pathfindingvisualizer.grid.GridContainer;
 
+import java.lang.reflect.Array;
 import java.util.*;
 
 @Push
@@ -56,10 +58,13 @@ public class Drawer extends AppLayout {
     private Label operatorOrderLabel;
     private ArrayList<IntegerField> operatorOrderFields;
     private Button randomObstaclesButton;
+    private Button loadMenuButton;
     private Button loadButton;
-    private Button saveButton;
+    private Dialog loadDialog;
+    private TextArea gridLoadText;
+    private Button saveMenuButton;
     private Dialog saveDialog;
-    private TextArea gridText;
+    private TextArea gridSaveText;
 
     private final GridContainer gridContainer;
     private final Component drawerContent;
@@ -263,6 +268,46 @@ public class Drawer extends AppLayout {
         hLayout2.add(operatorOrderFields.get(3));
         vLayout.add(hLayout2);
 
+        randomObstaclesButton = new Button("Add Random Obstacles");
+        randomObstaclesButton.addClickListener(e -> gridContainer.addRandomObstacles(0.25));
+        vLayout.add(randomObstaclesButton);
+
+        // Load Layout
+        loadDialog = new Dialog();
+        loadDialog.setWidth("50vw");
+        loadDialog.setHeight("50vh");
+        loadDialog.add("Please input your grid configuration:");
+
+        loadDialog.add(new HtmlComponent("br"));
+        loadDialog.add(new HtmlComponent("br"));
+
+        gridLoadText = new TextArea();
+        gridLoadText.addClassName("no-wrap");
+        gridLoadText.setWidth("100%");
+        gridLoadText.setHeight("75%");
+        loadDialog.add(gridLoadText);
+
+        loadButton = new Button("Load");
+        loadButton.addClickListener(e -> {
+            String text = gridLoadText.getValue();
+
+            ArrayList<String> lineList = new ArrayList<>(Arrays.asList(text.split("\n")));
+            ArrayList<ArrayList<Character>> charMatrix = new ArrayList<>();
+            for (String s : lineList) {
+                ArrayList<Character> temp = new ArrayList<>();
+                char[] chs = s.toCharArray();
+                for (char ch : chs)
+                    temp.add(ch);
+
+                charMatrix.add(temp);
+            }
+
+            gridContainer.loadFromCharMatrix(charMatrix);
+        });
+
+        loadDialog.add(loadButton);
+
+        // Save Layout
         saveDialog = new Dialog();
         saveDialog.setWidth("50vw");
         saveDialog.setHeight("50vh");
@@ -271,29 +316,29 @@ public class Drawer extends AppLayout {
         saveDialog.add(new HtmlComponent("br"));
         saveDialog.add(new HtmlComponent("br"));
 
-        gridText = new TextArea();
-        gridText.addClassName("no-wrap");
-        gridText.setWidth("100%");
-        gridText.setHeight("85%");
-        saveDialog.add(gridText);
+        gridSaveText = new TextArea();
+        gridSaveText.addClassName("no-wrap");
+        gridSaveText.setWidth("100%");
+        gridSaveText.setHeight("85%");
+        saveDialog.add(gridSaveText);
 
-        randomObstaclesButton = new Button("Add Random Obstacles");
-        randomObstaclesButton.addClickListener(e -> gridContainer.addRandomObstacles(0.25));
-        vLayout.add(randomObstaclesButton);
 
+        //
         HorizontalLayout hLayout3 = new HorizontalLayout();
 
-        loadButton = new Button("Load");
-        hLayout3.add(loadButton);
+        loadMenuButton = new Button("Load");
+        loadMenuButton.addClickListener(e -> {
+            loadDialog.open();
+        });
+        hLayout3.add(loadMenuButton);
 
-
-        saveButton = new Button("Save");
-        saveButton.addClickListener(e -> {
-            gridText.setValue(gridContainer.toString());
+        saveMenuButton = new Button("Save");
+        saveMenuButton.addClickListener(e -> {
+            gridSaveText.setValue(gridContainer.toString());
             saveDialog.open();
         });
 
-        hLayout3.add(saveButton);
+        hLayout3.add(saveMenuButton);
 
         vLayout.add(hLayout3);
 
